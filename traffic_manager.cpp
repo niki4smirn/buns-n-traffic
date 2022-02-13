@@ -43,3 +43,27 @@ int TrafficManager::GetTotalBunsAmount() const {
 int TrafficManager::GetTotalVehicles() const {
   return total_vehicles_;
 }
+
+void TrafficManager::SetBunsAmounts(std::vector<int> buns_amounts) {
+  buns_amounts_ = std::move(buns_amounts);
+  total_buns_amount_ =
+      std::accumulate(buns_amounts_.begin(), buns_amounts_.end(), 0);
+}
+
+void TrafficManager::SetVehicles(std::vector<int> vehicles) {
+  vehicles_ = std::move(vehicles);
+  total_vehicles_ =
+      std::accumulate(vehicles_.begin(), vehicles_.end(), 0);
+}
+
+void TrafficManager::SetBunsAmount(int town, int buns_amount) {
+  total_buns_amount_ -= buns_amounts_[town];
+  total_buns_amount_ += buns_amount;
+  buns_amounts_[town] = buns_amount;
+}
+
+void TrafficManager::SetVehicle(int town, int vehicle) {
+  total_vehicles_ -= vehicles_[town];
+  total_vehicles_ += vehicle;
+  vehicles_[town] = vehicle;
+}
