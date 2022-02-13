@@ -1,0 +1,21 @@
+name: cpplint
+
+on:
+  push:
+    branches: [ main, developing ]
+  pull_request:
+    branches: [ main, developing ]
+
+jobs:
+  cpplint:
+    runs-on: ubuntu-latest
+    name: cpplint
+    steps:
+      - uses: actions/checkout@v2.4.0
+        name: Checkout
+      - uses: actions/setup-python@v2.3.2
+        name: Setup Python
+      - run: pip install cpplint
+        name: Install cpplint
+      - run: cpplint --recursive --filter=-build/include,-runtime/int,-build/include_subdir,-legal/copyright,-build/c++20,-build/c++11 .
+        name: Run cpplint
