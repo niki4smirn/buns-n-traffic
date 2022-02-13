@@ -1,5 +1,4 @@
 #include <cassert>
-#include <numeric>
 #include <utility>
 
 #include "graph.h"
@@ -44,10 +43,5 @@ const std::vector<Graph::Edge>& Graph::GetEdges(int from) const {
 }
 
 int Graph::GetSize() const {
-  return std::accumulate(connections_.begin(),
-                         connections_.end(),
-                         0,
-                         [](int init, const std::vector<Edge>& line) {
-                           return line.size() + init;
-                         });
+  return n_;
 }

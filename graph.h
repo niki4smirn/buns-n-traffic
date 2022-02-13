@@ -17,7 +17,7 @@ class Graph {
   int GetEdgeLength(int from, int to) const;
   const std::vector<Edge>& GetEdges(int from) const;
 
-  int GetSize() const;
+  int GetSize() const;  // returns vertices count
 
   std::vector<Edge> GetAnyPath(int from, int to) const;
   std::vector<Edge> GetShortestPath(int from, int to) const;
