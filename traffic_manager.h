@@ -2,7 +2,9 @@
 
 #include <vector>
 
-class Graph;
+class Graph {
+
+};
 
 class TrafficManager {
  public:
@@ -30,6 +32,12 @@ class TrafficManager {
 
   int Transport(int from, int to, int buns_amount);
   int TransportWithReturns(int from, int to, int buns_amount);
+
+ private:
+  Graph graph_;
+  std::vector<int> buns_amounts_;
+  std::vector<int> vehicles_;
+  int vehicle_capacity_{0};
 };
 
 
