@@ -38,6 +38,9 @@ class TrafficManager {
   std::vector<int> buns_amounts_;
   std::vector<int> vehicles_;
   int vehicle_capacity_{0};
+
+  int total_buns_amount_{0};
+  int total_vehicles_{0};
 };
 
 
