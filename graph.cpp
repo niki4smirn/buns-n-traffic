@@ -1,3 +1,5 @@
+#include <cassert>
+#include <numeric>
 #include <utility>
 
 #include "graph.h"
@@ -17,4 +19,35 @@ Graph::Graph(int a) : n_(a) {
       }
     }
   }
+}
+
+int Graph::GetEdgeLength(int from, int to) const {
+  assert(from < n_ && from >= 0);
+  assert(to < n_ && to >= 0);
+
+  auto edge = std::find_if(connections_[from].begin(),
+                           connections_[from].end(),
+                           [to](Edge edge) {
+                             return edge.to == to;
+                           });
+  if (edge != connections_[from].end()) {
+    return edge->length;
+  } else {
+    return 0;
+  }
+}
+
+const std::vector<Graph::Edge>& Graph::GetEdges(int from) const {
+  assert(from < n_ && from >= 0);
+
+  return connections_[from];
+}
+
+int Graph::GetSize() const {
+  return std::accumulate(connections_.begin(),
+                         connections_.end(),
+                         0,
+                         [](int init, const std::vector<Edge>& line) {
+                           return line.size() + init;
+                         });
 }
