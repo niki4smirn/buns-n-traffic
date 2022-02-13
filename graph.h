@@ -12,7 +12,7 @@ class Graph {
 
   Graph() = default;
   explicit Graph(std::vector<std::vector<Edge>> list);
-  explicit Graph(int a);
+  explicit Graph(int n);  // creates complete graph with n vertices
 
   int GetEdgeLength(int from, int to) const;
   const std::vector<Edge>& GetEdges(int from) const;
