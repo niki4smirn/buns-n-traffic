@@ -67,3 +67,16 @@ void TrafficManager::SetVehicle(int town, int vehicle) {
   total_vehicles_ += vehicle;
   vehicles_[town] = vehicle;
 }
+
+// maybe check if it's possible to move
+int TrafficManager::MoveVehicles(int from, int to, int count) {
+  vehicles_[from] -= count;
+  vehicles_[to] += count;
+  auto path = graph_.GetShortestPath(from, to);
+  // maybe int64_t
+  int total_len = 0;
+  for (const auto& [_, len] : path) {
+    total_len += len;
+  }
+  return total_len;
+}

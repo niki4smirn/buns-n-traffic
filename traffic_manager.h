@@ -2,8 +2,16 @@
 
 #include <vector>
 
-class Graph {
+struct Edge {
+  int to{0};
+  int len{0};
+};
 
+class Graph {
+ public:
+  std::vector<Edge> GetShortestPath(int from, int to) const {
+    return {};
+  }
 };
 
 class TrafficManager {
