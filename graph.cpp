@@ -1,8 +1,7 @@
 #include <cassert>
 #include <limits>
-#include <utility>
 #include <queue>
-#include <map>
+#include <utility>
 
 #include "graph.h"
 
@@ -143,6 +142,6 @@ std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(int from) {
   for (int i = 0; i < n_; ++i) {
     paths.push_back(RestorePath(ancestors, i));
   }
-  
+
   return paths;
 }
