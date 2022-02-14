@@ -1,4 +1,5 @@
 #include <cassert>
+#include <limits>
 #include <utility>
 #include <queue>
 #include <map>
@@ -84,4 +85,73 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
   }
 
   return path;
+}
+
+std::vector<Graph::Edge> Graph::RestorePath(
+    const std::vector<std::pair<Edge, int>>& ancestors,
+    int to) {
+  std::vector<Edge> path;
+
+  for (int i = to; ancestors[i].second != -1; i = ancestors[i].second) {
+    path.push_back(ancestors[i].first);
+  }
+
+  std::reverse(path.begin(), path.end());
+
+  return path;
+}
+
+std::vector<std::pair<Graph::Edge, int>> Graph::CreateAncestors(
+    int from) const {
+  const int kInf = std::numeric_limits<int>::max();
+
+  // stores vertices, that were explored
+  std::vector<bool> is_used(n_, false);
+  // used to restore path
+  std::vector<std::pair<Edge, int>>
+      ancestors(n_, std::make_pair(Edge(-1, -1), -1));
+  // dist[i] stores distance from 'from'-th vertex to i-th
+  std::vector<int> dist(n_, kInf);
+
+  dist[from] = 0;
+
+  for (int i = 0; i < n_; ++i) {
+    int vertex = -1;
+    for (int j = 0; j < n_; ++j) {
+      if ((!is_used[j]) && (vertex == -1 || dist[j] < dist[vertex])) {
+        vertex = j;
+      }
+    }
+    if (dist[vertex] == kInf) {
+      break;
+    }
+
+    is_used[vertex] = true;
+
+    for (const auto& edge : connections_[vertex]) {
+      if (dist[vertex] + edge.length < dist[edge.to]) {
+        dist[edge.to] = dist[vertex] + edge.length;
+        ancestors[edge.to] = std::make_pair(edge, vertex);
+      }
+    }
+  }
+
+  return ancestors;
+}
+
+std::vector<Graph::Edge> Graph::GetShortestPath(int from, int to) const {
+  return RestorePath(CreateAncestors(from), to);
+}
+
+std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(int from) {
+  auto ancestors = CreateAncestors(from);
+
+  std::vector<std::vector<Edge>> paths;
+  paths.reserve(n_);
+
+  for (int i = 0; i < n_; ++i) {
+    paths.push_back(RestorePath(ancestors, i));
+  }
+  
+  return paths;
 }

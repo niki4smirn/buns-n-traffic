@@ -24,6 +24,12 @@ class Graph {
   std::vector<std::vector<Edge>> GetShortestPaths(int from);
 
  private:
+  std::vector<std::pair<Edge, int>> CreateAncestors(
+      int from) const;  // uses Dijkstra's algorithm
+  static std::vector<Edge> RestorePath(
+      const std::vector<std::pair<Edge, int>>& ancestors,
+      int to);
+
   std::vector<std::vector<Edge>> connections_{};
   int n_{0};
 };
