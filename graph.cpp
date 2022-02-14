@@ -56,8 +56,7 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
   std::vector<bool> is_used(n_, false);
   // used to restore path
   std::vector<std::pair<Edge, int>>
-      previous(n_, std::make_pair(Edge(-1, -1), -1));
-  std::vector<Edge> path;
+      ancestors(n_, std::make_pair(Edge(-1, -1), -1));
 
   is_used[from] = true;
 
@@ -71,20 +70,12 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
       if (!is_used[edge.to]) {
         is_used[edge.to] = true;
         q.push(edge);
-        previous[edge.to] = std::make_pair(edge, temp.to);
+        ancestors[edge.to] = std::make_pair(edge, temp.to);
       }
     }
   }
 
-  if (is_used[to]) {
-    for (int i = to; previous[i].second != -1; i = previous[i].second) {
-      path.push_back(previous[i].first);
-    }
-
-    std::reverse(path.begin(), path.end());
-  }
-
-  return path;
+  return RestorePath(ancestors, to);
 }
 
 std::vector<Graph::Edge> Graph::RestorePath(
