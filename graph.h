@@ -19,7 +19,7 @@ class Graph {
 
   int GetSize() const;  // returns vertices count
 
-  std::vector<Edge> GetAnyPath(int from, int to) const;
+  std::vector<Edge> GetAnyPath(int from, int to) const;  // uses BFS algorithm
   std::vector<Edge> GetShortestPath(int from, int to) const;
   std::vector<std::vector<Edge>> GetShortestPaths(int from);
 
