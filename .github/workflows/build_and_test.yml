@@ -16,7 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2.4.0
         name: Checkout
-      - run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - run: sudo apt update && sudo apt install g++-11
+        name: Install g++-11
+      - run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_CXX_COMPILER=g++-11
         name: Configure CMake
       - run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
         name: Build project
