@@ -250,3 +250,65 @@ TEST(Graph, GetShortestPath) {
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(4, 3), 4), 3);
   }
 }
+
+TEST(Graph, GetShortestPaths) {
+  {
+    Graph graph(6);
+
+    for (int i = 0; i < 6; ++i) {
+      auto paths = graph.GetShortestPaths(i);
+      for (int j = 0; j < 6; ++j) {
+        if (i != j) {
+          ASSERT_EQ(GetPathLength(graph, paths[j], i), 1);
+        } else {
+          ASSERT_TRUE(paths[j].empty());
+        }
+      }
+    }
+  }
+  {
+    std::vector<std::vector<Graph::Edge>> connections = {
+        {Graph::Edge(4, 6)},
+        {Graph::Edge(2, 3), Graph::Edge(4, 1)},
+        {Graph::Edge(1, 3), Graph::Edge(3, 1)},
+        {Graph::Edge(2, 1), Graph::Edge(4, 3)},
+        {Graph::Edge(0, 6), Graph::Edge(1, 1), Graph::Edge(3, 3)}};
+
+    Graph graph(connections);
+
+    auto paths = graph.GetShortestPaths(0);
+    ASSERT_TRUE(paths[0].empty());
+    ASSERT_EQ(GetPathLength(graph, paths[1], 0), 7);
+    ASSERT_EQ(GetPathLength(graph, paths[2], 0), 10);
+    ASSERT_EQ(GetPathLength(graph, paths[3], 0), 9);
+    ASSERT_EQ(GetPathLength(graph, paths[4], 0), 6);
+
+    paths = graph.GetShortestPaths(1);
+    ASSERT_EQ(GetPathLength(graph, paths[0], 1), 7);
+    ASSERT_TRUE(paths[1].empty());
+    ASSERT_EQ(GetPathLength(graph, paths[2], 1), 3);
+    ASSERT_EQ(GetPathLength(graph, paths[3], 1), 4);
+    ASSERT_EQ(GetPathLength(graph, paths[4], 1), 1);
+
+    paths = graph.GetShortestPaths(2);
+    ASSERT_EQ(GetPathLength(graph, paths[0], 2), 10);
+    ASSERT_EQ(GetPathLength(graph, paths[1], 2), 3);
+    ASSERT_TRUE(paths[2].empty());
+    ASSERT_EQ(GetPathLength(graph, paths[3], 2), 1);
+    ASSERT_EQ(GetPathLength(graph, paths[4], 2), 4);
+
+    paths = graph.GetShortestPaths(3);
+    ASSERT_EQ(GetPathLength(graph, paths[0], 3), 9);
+    ASSERT_EQ(GetPathLength(graph, paths[1], 3), 4);
+    ASSERT_EQ(GetPathLength(graph, paths[2], 3), 1);
+    ASSERT_TRUE(paths[3].empty());
+    ASSERT_EQ(GetPathLength(graph, paths[4], 3), 3);
+
+    paths = graph.GetShortestPaths(4);
+    ASSERT_EQ(GetPathLength(graph, paths[0], 4), 6);
+    ASSERT_EQ(GetPathLength(graph, paths[1], 4), 1);
+    ASSERT_EQ(GetPathLength(graph, paths[2], 4), 4);
+    ASSERT_EQ(GetPathLength(graph, paths[3], 4), 3);
+    ASSERT_TRUE(paths[4].empty());
+  }
+}
