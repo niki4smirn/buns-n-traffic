@@ -137,3 +137,60 @@ TEST(Graph, GetEdges) {
     }
   }
 }
+
+// returns std::nullopt if path is invalid
+std::optional<int> GetPathLength(
+    const Graph& graph,
+    const std::vector<Graph::Edge>& path,
+    int from) {
+  int distance = 0;
+
+  for (const auto& edge : path) {
+    if (graph.GetEdgeLength(from, edge.to) == edge.length) {
+      distance += edge.length;
+      from = edge.to;
+    } else {
+      return std::nullopt;
+    }
+  }
+
+  return distance;
+}
+
+TEST(Graph, GetAnyPath) {
+  {
+    Graph graph(6);
+
+    for (int i = 0; i < 6; ++i) {
+      for (int j = 0; j < 6; ++j) {
+        if (i != j) {
+          ASSERT_NE(GetPathLength(graph, graph.GetAnyPath(i, j), i),
+                    std::nullopt);
+        } else {
+          ASSERT_TRUE(graph.GetAnyPath(i, j).empty());
+        }
+      }
+    }
+  }
+  {
+    std::vector<std::vector<Graph::Edge>> connections = {
+        {Graph::Edge(4, 6)},
+        {Graph::Edge(2, 3), Graph::Edge(4, 1)},
+        {Graph::Edge(1, 3), Graph::Edge(3, 2)},
+        {Graph::Edge(2, 2), Graph::Edge(4, 7)},
+        {Graph::Edge(0, 6), Graph::Edge(1, 1), Graph::Edge(3, 7)}};
+
+    Graph graph(connections);
+
+    for (int i = 0; i < 5; ++i) {
+      for (int j = 0; j < 5; ++j) {
+        if (i != j) {
+          ASSERT_NE(GetPathLength(graph, graph.GetAnyPath(i, j), i),
+                    std::nullopt);
+        } else {
+          ASSERT_TRUE(graph.GetAnyPath(i, j).empty());
+        }
+      }
+    }
+  }
+}
