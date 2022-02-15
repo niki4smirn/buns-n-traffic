@@ -6,6 +6,9 @@ class Graph {
  public:
   struct Edge {
     Edge(int to_, int length_);
+
+    bool operator==(const Edge& rhs) const = default;
+
     int to;
     int length;
   };
