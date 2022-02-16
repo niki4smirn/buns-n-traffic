@@ -79,13 +79,7 @@ int TrafficManager::MoveVehicles(int from, int to, int count) {
   assert(0 <= to && to < vehicles_.size());
   vehicles_[from] -= count;
   vehicles_[to] += count;
-  auto path = graph_.GetShortestPath(from, to);
-  // maybe int64_t
-  int total_len = 0;
-  for (const auto& [_, len] : path) {
-    total_len += len;
-  }
-  return total_len;
+  return GetLenForPath(graph_.GetShortestPath(from, to));
 }
 
 int TrafficManager::Transport(int from, int to, int buns_amount) {
@@ -101,6 +95,9 @@ int TrafficManager::Transport(int from, int to, int buns_amount) {
 struct PathToTownInfo {
   int town_index{0};
   int length{0};
+
+  std::strong_ordering operator<=>(
+      const PathToTownInfo& path_to_town_info) const = default;
 };
 
 int TrafficManager::MoveClosestVehicles(int to, int count) {
@@ -131,4 +128,13 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
     }
   }
   return res;
+}
+
+int TrafficManager::GetLenForPath(const std::vector<Edge>& path) {
+  // maybe int64_t
+  int total_len = 0;
+  for (const auto& [_, len] : path) {
+    total_len += len;
+  }
+  return total_len;
 }

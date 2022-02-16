@@ -12,7 +12,7 @@ class Graph {
   std::vector<Edge> GetShortestPath(int from, int to) const {
     return {};
   }
-  const std::vector<Edge>& GetEdges(int from) const {
+  std::vector<Edge> GetEdges(int from) const {
     return {};
   }
 };
@@ -46,6 +46,7 @@ class TrafficManager {
 
  private:
   int MoveClosestVehicles(int to, int count);
+  static int GetLenForPath(const std::vector<Edge>& path);
 
  private:
   Graph graph_;
