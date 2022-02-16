@@ -11,6 +11,6 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(lab1 main.cpp traffic_manager.cpp)
+add_executable(Test main.cpp traffic_manager.cpp)
 
-target_link_libraries(lab1 gtest_main)
+target_link_libraries(Test gtest_main)

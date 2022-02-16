@@ -1,0 +1,25 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ master, developing ]
+  pull_request:
+    branches: [ master, developing ]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build & Test
+    steps:
+      - uses: actions/checkout@v2.4.0
+        name: Checkout
+      - run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        name: Configure CMake
+      - run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+        name: Build project
+      - working-directory: ${{github.workspace}}/build
+        run: ./Test
+        name: Run tests
