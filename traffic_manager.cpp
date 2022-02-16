@@ -89,6 +89,8 @@ int TrafficManager::Transport(int from, int to, int buns_amount) {
   int result =
       MoveClosestVehicles(from, std::max(vehicles_needed - vehicles_[from], 0));
   result += MoveVehicles(from, to, vehicles_needed);
+  SetBunsAmount(from, buns_amounts_[from] - buns_amount);
+  SetBunsAmount(to, buns_amounts_[to] + buns_amount);
   return result;
 }
 
