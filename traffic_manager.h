@@ -12,6 +12,9 @@ class Graph {
   std::vector<Edge> GetShortestPath(int from, int to) const {
     return {};
   }
+  const std::vector<Edge>& GetEdges(int from) const {
+    return {};
+  }
 };
 
 class TrafficManager {
@@ -40,6 +43,9 @@ class TrafficManager {
 
   int Transport(int from, int to, int buns_amount);
   int TransportWithReturns(int from, int to, int buns_amount);
+
+ private:
+  int MoveClosestVehicles(int to, int count);
 
  private:
   Graph graph_;

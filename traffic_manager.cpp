@@ -1,7 +1,10 @@
 #include "traffic_manager.h"
 
 #include <cassert>
+#include <cmath>
 #include <numeric>
+#include <set>
+#include <unordered_map>
 
 TrafficManager::TrafficManager(
     const Graph& graph,
@@ -83,4 +86,49 @@ int TrafficManager::MoveVehicles(int from, int to, int count) {
     total_len += len;
   }
   return total_len;
+}
+
+int TrafficManager::Transport(int from, int to, int buns_amount) {
+  assert(0 <= from && from < vehicles_.size());
+  assert(0 <= to && to < vehicles_.size());
+  int vehicles_needed = ceil(1. * buns_amount / vehicle_capacity_);
+  int result =
+      MoveClosestVehicles(from, std::max(vehicles_needed - vehicles_[from], 0));
+  result += MoveVehicles(from, to, vehicles_needed);
+  return result;
+}
+
+struct PathToTownInfo {
+  int town_index{0};
+  int length{0};
+};
+
+int TrafficManager::MoveClosestVehicles(int to, int count) {
+  int res = 0;
+  std::set<PathToTownInfo> towns_queue;
+  towns_queue.insert({0, to});
+  std::unordered_map<int, int> distance;
+  distance[to] = 0;
+
+  while (count > 0 && !towns_queue.empty()) {
+    auto begin_it = towns_queue.begin();
+    int town_index = begin_it->town_index;
+    towns_queue.erase(begin_it);
+
+    int cur_move_count = std::min(vehicles_[town_index], count);
+    res = MoveVehicles(town_index, to, cur_move_count);
+    count -= cur_move_count;
+    for (auto [next_vertex, len] : graph_.GetEdges(town_index)) {
+      bool can_update_existing =
+          distance[next_vertex] > len + distance[town_index];
+      if (can_update_existing) {
+        towns_queue.erase({distance[next_vertex], next_vertex});
+      }
+      if (!distance.contains(next_vertex) || can_update_existing) {
+        distance[next_vertex] = distance[town_index] + len;
+        towns_queue.insert({distance[next_vertex], next_vertex});
+      }
+    }
+  }
+  return res;
 }
