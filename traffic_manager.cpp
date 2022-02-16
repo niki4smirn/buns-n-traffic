@@ -27,12 +27,12 @@ const std::vector<int>& TrafficManager::GetVehicles() const {
 }
 
 int TrafficManager::GetBunsAmount(int town) const {
-  assert(town < buns_amounts_.size());
+  assert(0 <= town && town < buns_amounts_.size());
   return buns_amounts_[town];
 }
 
 int TrafficManager::GetVehicle(int town) const {
-  assert(town < vehicles_.size());
+  assert(0 <= town && town < vehicles_.size());
   return vehicles_[town];
 }
 
@@ -57,12 +57,14 @@ void TrafficManager::SetVehicles(std::vector<int> vehicles) {
 }
 
 void TrafficManager::SetBunsAmount(int town, int buns_amount) {
+  assert(0 <= town && town < buns_amounts_.size());
   total_buns_amount_ -= buns_amounts_[town];
   total_buns_amount_ += buns_amount;
   buns_amounts_[town] = buns_amount;
 }
 
 void TrafficManager::SetVehicle(int town, int vehicle) {
+  assert(0 <= town && town < vehicles_.size());
   total_vehicles_ -= vehicles_[town];
   total_vehicles_ += vehicle;
   vehicles_[town] = vehicle;
@@ -70,6 +72,8 @@ void TrafficManager::SetVehicle(int town, int vehicle) {
 
 // maybe check if it's possible to move
 int TrafficManager::MoveVehicles(int from, int to, int count) {
+  assert(0 <= from && from < vehicles_.size());
+  assert(0 <= to && to < vehicles_.size());
   vehicles_[from] -= count;
   vehicles_[to] += count;
   auto path = graph_.GetShortestPath(from, to);
