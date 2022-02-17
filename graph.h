@@ -31,7 +31,7 @@ class Graph {
 
  private:
   // uses Dijkstra's algorithm
-  std::vector<std::pair<Edge, int>> CreateAncestors(
+  std::vector<std::pair<Edge, int>> GenerateShortestPathAncestors(
       int from) const;
   static std::vector<Edge> RestorePath(
       const std::vector<std::pair<Edge, int>>& ancestors,
