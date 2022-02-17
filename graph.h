@@ -15,25 +15,29 @@ class Graph {
 
   Graph() = default;
   explicit Graph(std::vector<std::vector<Edge>> list);
-  explicit Graph(int n);  // creates complete graph with n vertices
+  // creates complete graph with n vertices
+  explicit Graph(int n);
 
   int GetEdgeLength(int from, int to) const;
   const std::vector<Edge>& GetEdges(int from) const;
 
-  int GetSize() const;  // returns vertices count
+  // returns vertices count
+  int GetSize() const;
 
-  std::vector<Edge> GetAnyPath(int from, int to) const;  // uses BFS algorithm
+  // uses BFS algorithm
+  std::vector<Edge> GetAnyPath(int from, int to) const;
   std::vector<Edge> GetShortestPath(int from, int to) const;
   std::vector<std::vector<Edge>> GetShortestPaths(int from);
 
  private:
+  // uses Dijkstra's algorithm
   std::vector<std::pair<Edge, int>> CreateAncestors(
-      int from) const;  // uses Dijkstra's algorithm
+      int from) const;
   static std::vector<Edge> RestorePath(
       const std::vector<std::pair<Edge, int>>& ancestors,
       int to);
 
-  std::vector<std::vector<Edge>> connections_{};
+  std::vector<std::vector<Edge>> connections_;
   int n_{0};
 };
 
