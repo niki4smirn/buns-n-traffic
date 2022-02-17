@@ -23,8 +23,8 @@ Graph::Graph(int n) : n_(n) {
 }
 
 int Graph::GetEdgeLength(int from, int to) const {
-  assert(from < n_ && from >= 0);
-  assert(to < n_ && to >= 0);
+  assert(0 <= from && from < n_);
+  assert(0 <= to && to < n_);
 
   auto edge = std::find_if(connections_[from].begin(),
                            connections_[from].end(),
@@ -39,7 +39,7 @@ int Graph::GetEdgeLength(int from, int to) const {
 }
 
 const std::vector<Graph::Edge>& Graph::GetEdges(int from) const {
-  assert(from < n_ && from >= 0);
+  assert(0 <= from && from < n_);
 
   return connections_[from];
 }
@@ -49,6 +49,9 @@ int Graph::GetSize() const {
 }
 
 std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
+  assert(0 <= from && from < n_);
+  assert(0 <= to && to < n_);
+
   // stores vertices, that will be explored later on
   std::queue<Edge> q;
   // stores vertices, that were explored
@@ -80,6 +83,8 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
 std::vector<Graph::Edge> Graph::RestorePath(
     const std::vector<std::pair<Edge, int>>& ancestors,
     int to) {
+  assert(0 <= to && to < ancestors.size());
+
   std::vector<Edge> path;
 
   for (int i = to; ancestors[i].second != -1; i = ancestors[i].second) {
@@ -93,6 +98,8 @@ std::vector<Graph::Edge> Graph::RestorePath(
 
 std::vector<std::pair<Graph::Edge, int>> Graph::CreateAncestors(
     int from) const {
+  assert(0 <= from && from < n_);
+
   const int kInf = std::numeric_limits<int>::max();
 
   // stores vertices, that were explored
@@ -130,10 +137,15 @@ std::vector<std::pair<Graph::Edge, int>> Graph::CreateAncestors(
 }
 
 std::vector<Graph::Edge> Graph::GetShortestPath(int from, int to) const {
+  assert(0 <= from && from < n_);
+  assert(0 <= to && to < n_);
+
   return RestorePath(CreateAncestors(from), to);
 }
 
 std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(int from) {
+  assert(0 <= from && from < n_);
+
   auto ancestors = CreateAncestors(from);
 
   std::vector<std::vector<Edge>> paths;
