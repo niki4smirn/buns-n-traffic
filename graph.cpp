@@ -31,11 +31,12 @@ int Graph::GetEdgeLength(int from, int to) const {
                            [to](Edge edge) {
                              return edge.to == to;
                            });
-  if (edge != connections_[from].end()) {
-    return edge->length;
-  } else {
+
+  if (edge == connections_[from].end()) {
     return 0;
   }
+
+  return edge->length;
 }
 
 const std::vector<Graph::Edge>& Graph::GetEdges(int from) const {
