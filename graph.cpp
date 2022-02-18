@@ -28,13 +28,13 @@ int Graph::GetEdgeLength(int from, int to) const {
   assert(0 <= from && from < n_);
   assert(0 <= to && to < n_);
 
-  auto edge = std::find_if(connections_[from].begin(),
-                           connections_[from].end(),
+  auto edge = std::find_if(GetEdges(from).begin(),
+                           GetEdges(from).end(),
                            [to](Edge edge) {
                              return edge.to == to;
                            });
 
-  if (edge == connections_[from].end()) {
+  if (edge == GetEdges(from).end()) {
     return 0;
   }
 
@@ -71,7 +71,7 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
     Edge temp = q.front();
     q.pop();
 
-    for (const auto& edge : connections_[temp.to]) {
+    for (const auto& edge : GetEdges(temp.to)) {
       if (!is_used[edge.to]) {
         is_used[edge.to] = true;
         q.push(edge);
@@ -170,7 +170,7 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForSparse(
       // break;
     }
 
-    for (const auto& edge : connections_[vertex]) {
+    for (const auto& edge : GetEdges(vertex)) {
       if (dist[vertex] + edge.length < dist[edge.to]) {
         dist[edge.to] = dist[vertex] + edge.length;
         ancestors[edge.to] = std::make_pair(edge, vertex);
@@ -211,7 +211,7 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForDense(
 
     is_used[vertex] = true;
 
-    for (const auto& edge : connections_[vertex]) {
+    for (const auto& edge : GetEdges(vertex)) {
       if (dist[vertex] + edge.length < dist[edge.to]) {
         dist[edge.to] = dist[vertex] + edge.length;
         ancestors[edge.to] = std::make_pair(edge, vertex);
