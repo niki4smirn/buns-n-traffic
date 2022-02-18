@@ -312,3 +312,23 @@ TEST(Graph, GetShortestPaths) {
     ASSERT_TRUE(paths[4].empty());
   }
 }
+
+TEST(Graph, GetEdgesCount) {
+  {
+    Graph graph(6);
+
+    ASSERT_EQ(graph.GetEdgesCount(), 15);
+  }
+  {
+    std::vector<std::vector<Graph::Edge>> connections = {
+        {Graph::Edge(4, 6)},
+        {Graph::Edge(2, 3), Graph::Edge(4, 1)},
+        {Graph::Edge(1, 3), Graph::Edge(3, 2)},
+        {Graph::Edge(2, 2), Graph::Edge(4, 7)},
+        {Graph::Edge(0, 6), Graph::Edge(1, 1), Graph::Edge(3, 7)}};
+
+    Graph graph(connections);
+
+    ASSERT_EQ(graph.GetEdgesCount(), 5);
+  }
+}
