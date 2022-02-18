@@ -23,6 +23,7 @@ class Graph {
 
   // returns vertices count
   int GetSize() const;
+  int GetEdgesCount() const;
 
   // uses BFS algorithm
   std::vector<Edge> GetAnyPath(int from, int to) const;
@@ -33,6 +34,8 @@ class Graph {
   // uses Dijkstra's algorithm
   std::vector<std::pair<Edge, int>> GenerateShortestPathAncestors(
       int from) const;
+  std::vector<std::pair<Edge, int>> DijkstraForDense(int from) const;
+  std::vector<std::pair<Edge, int>> DijkstraForSparse(int from) const;
   static std::vector<Edge> RestorePath(
       const std::vector<std::pair<Edge, int>>& ancestors,
       int to);

@@ -1,5 +1,7 @@
 #include <cassert>
+#include <cmath>
 #include <limits>
+#include <numeric>
 #include <queue>
 #include <utility>
 
@@ -99,6 +101,89 @@ std::vector<Graph::Edge> Graph::RestorePath(
 
 std::vector<std::pair<Graph::Edge, int>> Graph::GenerateShortestPathAncestors(
     int from) const {
+  int edges_count = GetEdgesCount();
+
+  if (n_ * n_ + edges_count < edges_count * std::log(n_)) {
+    return DijkstraForDense(from);
+  } else {
+    return DijkstraForSparse(from);
+  }
+}
+
+std::vector<Graph::Edge> Graph::GetShortestPath(int from, int to) const {
+  assert(0 <= from && from < n_);
+  assert(0 <= to && to < n_);
+
+  return RestorePath(GenerateShortestPathAncestors(from), to);
+}
+
+std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(int from) {
+  assert(0 <= from && from < n_);
+
+  auto ancestors = GenerateShortestPathAncestors(from);
+
+  std::vector<std::vector<Edge>> paths;
+  paths.reserve(n_);
+
+  for (int i = 0; i < n_; ++i) {
+    paths.push_back(RestorePath(ancestors, i));
+  }
+
+  return paths;
+}
+
+int Graph::GetEdgesCount() const {
+  return std::accumulate(connections_.begin(),
+                         connections_.end(),
+                         0,
+                         [](int init, const auto& edges) {
+                           return init + edges.size();
+                         }) / 2;
+}
+
+std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForSparse(
+    int from) const {
+  assert(0 <= from && from < n_);
+
+  const int kInf = std::numeric_limits<int>::max();
+
+  // stores vertices, that will be explored later on
+  std::priority_queue<std::pair<int, int>,
+                      std::vector<std::pair<int, int>>,
+                      std::greater<>> p_q;
+  std::vector<bool> is_used(n_, false);
+  // used to restore path
+  std::vector<std::pair<Edge, int>>
+      ancestors(n_, std::make_pair(Edge(-1, -1), -1));
+  // dist[i] stores distance from 'from'-th vertex to i-th
+  std::vector<int> dist(n_, kInf);
+
+  dist[from] = 0;
+  p_q.push(std::make_pair(0, from));
+
+  for (int i = 0; i < n_; ++i) {
+    int vertex = p_q.top().second;
+
+    p_q.pop();
+
+    if (dist[vertex] == kInf) {
+      // break;
+    }
+
+    for (const auto& edge : connections_[vertex]) {
+      if (dist[vertex] + edge.length < dist[edge.to]) {
+        dist[edge.to] = dist[vertex] + edge.length;
+        ancestors[edge.to] = std::make_pair(edge, vertex);
+        p_q.push(std::make_pair(dist[edge.to], edge.to));
+      }
+    }
+  }
+
+  return ancestors;
+}
+
+std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForDense(
+    int from) const {
   assert(0 <= from && from < n_);
 
   const int kInf = std::numeric_limits<int>::max();
@@ -135,26 +220,4 @@ std::vector<std::pair<Graph::Edge, int>> Graph::GenerateShortestPathAncestors(
   }
 
   return ancestors;
-}
-
-std::vector<Graph::Edge> Graph::GetShortestPath(int from, int to) const {
-  assert(0 <= from && from < n_);
-  assert(0 <= to && to < n_);
-
-  return RestorePath(GenerateShortestPathAncestors(from), to);
-}
-
-std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(int from) {
-  assert(0 <= from && from < n_);
-
-  auto ancestors = GenerateShortestPathAncestors(from);
-
-  std::vector<std::vector<Edge>> paths;
-  paths.reserve(n_);
-
-  for (int i = 0; i < n_; ++i) {
-    paths.push_back(RestorePath(ancestors, i));
-  }
-
-  return paths;
 }
