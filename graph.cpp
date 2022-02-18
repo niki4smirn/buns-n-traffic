@@ -166,10 +166,6 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForSparse(
 
     p_q.pop();
 
-    if (dist[vertex] == kInf) {
-      // break;
-    }
-
     for (const auto& edge : GetEdges(vertex)) {
       if (dist[vertex] + edge.length < dist[edge.to]) {
         dist[edge.to] = dist[vertex] + edge.length;
