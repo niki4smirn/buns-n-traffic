@@ -213,9 +213,9 @@ TEST(Graph, GetShortestPath) {
     std::vector<std::vector<Graph::Edge>> connections = {
         {Graph::Edge(4, 6)},
         {Graph::Edge(2, 3), Graph::Edge(4, 1)},
-        {Graph::Edge(1, 3), Graph::Edge(3, 1)},
-        {Graph::Edge(2, 1), Graph::Edge(4, 3)},
-        {Graph::Edge(0, 6), Graph::Edge(1, 1), Graph::Edge(3, 3)}};
+        {Graph::Edge(1, 3), Graph::Edge(3, 2)},
+        {Graph::Edge(2, 2), Graph::Edge(4, 7)},
+        {Graph::Edge(0, 6), Graph::Edge(1, 1), Graph::Edge(3, 7)}};
 
     Graph graph(connections);
 
@@ -225,8 +225,8 @@ TEST(Graph, GetShortestPath) {
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(0, 2), 0), 10);
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(2, 0), 2), 10);
 
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(0, 3), 0), 9);
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 0), 3), 9);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(0, 3), 0), 12);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 0), 3), 12);
 
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(0, 4), 0), 6);
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(4, 0), 4), 6);
@@ -234,20 +234,20 @@ TEST(Graph, GetShortestPath) {
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(1, 2), 1), 3);
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(2, 1), 2), 3);
 
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(1, 3), 1), 4);
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 1), 3), 4);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(1, 3), 1), 5);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 1), 3), 5);
 
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(1, 4), 1), 1);
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(4, 1), 4), 1);
 
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(2, 3), 2), 1);
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 2), 3), 1);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(2, 3), 2), 2);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 2), 3), 2);
 
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(2, 4), 2), 4);
     ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(4, 2), 4), 4);
 
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 4), 3), 3);
-    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(4, 3), 4), 3);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(3, 4), 3), 6);
+    ASSERT_EQ(GetPathLength(graph, graph.GetShortestPath(4, 3), 4), 6);
   }
 }
 
