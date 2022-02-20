@@ -28,7 +28,7 @@ class Graph {
   // uses BFS algorithm
   std::vector<Edge> GetAnyPath(int from, int to) const;
   std::vector<Edge> GetShortestPath(int from, int to) const;
-  std::vector<std::vector<Edge>> GetShortestPaths(int from);
+  std::vector<std::vector<Edge>> GetShortestPaths(int from) const;
 
  private:
   // uses Dijkstra's algorithm

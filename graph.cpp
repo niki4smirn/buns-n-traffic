@@ -55,7 +55,7 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
   assert(0 <= from && from < n_);
   assert(0 <= to && to < n_);
 
-  // stores vertices, that will be explored later on
+  // stores edges to vertices, that will be explored later on
   std::queue<Edge> q;
   // stores vertices, that were explored
   std::vector<bool> is_used(n_, false);
@@ -117,7 +117,8 @@ std::vector<Graph::Edge> Graph::GetShortestPath(int from, int to) const {
   return RestorePath(GenerateShortestPathAncestors(from), to);
 }
 
-std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(int from) {
+std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(
+    int from)  const {
   assert(0 <= from && from < n_);
 
   auto ancestors = GenerateShortestPathAncestors(from);
@@ -151,7 +152,6 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForSparse(
   std::priority_queue<std::pair<int, int>,
                       std::vector<std::pair<int, int>>,
                       std::greater<>> p_q;
-  std::vector<bool> is_used(n_, false);
   // used to restore path
   std::vector<std::pair<Edge, int>>
       ancestors(n_, std::make_pair(Edge(-1, -1), -1));
@@ -196,11 +196,13 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForDense(
 
   for (int i = 0; i < n_; ++i) {
     int vertex = -1;
+
     for (int j = 0; j < n_; ++j) {
       if ((!is_used[j]) && (vertex == -1 || dist[j] < dist[vertex])) {
         vertex = j;
       }
     }
+
     if (dist[vertex] == kInf) {
       break;
     }
