@@ -55,7 +55,7 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
   assert(0 <= from && from < n_);
   assert(0 <= to && to < n_);
 
-  // stores vertices, that will be explored later on
+  // stores edges to vertices, that will be explored later on
   std::queue<Edge> q;
   // stores vertices, that were explored
   std::vector<bool> is_used(n_, false);
