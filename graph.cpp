@@ -196,11 +196,13 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForDense(
 
   for (int i = 0; i < n_; ++i) {
     int vertex = -1;
+
     for (int j = 0; j < n_; ++j) {
       if ((!is_used[j]) && (vertex == -1 || dist[j] < dist[vertex])) {
         vertex = j;
       }
     }
+
     if (dist[vertex] == kInf) {
       break;
     }
