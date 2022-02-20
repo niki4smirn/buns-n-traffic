@@ -152,7 +152,6 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForSparse(
   std::priority_queue<std::pair<int, int>,
                       std::vector<std::pair<int, int>>,
                       std::greater<>> p_q;
-  std::vector<bool> is_used(n_, false);
   // used to restore path
   std::vector<std::pair<Edge, int>>
       ancestors(n_, std::make_pair(Edge(-1, -1), -1));
