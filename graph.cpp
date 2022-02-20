@@ -117,7 +117,8 @@ std::vector<Graph::Edge> Graph::GetShortestPath(int from, int to) const {
   return RestorePath(GenerateShortestPathAncestors(from), to);
 }
 
-std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(int from) {
+std::vector<std::vector<Graph::Edge>> Graph::GetShortestPaths(
+    int from)  const {
   assert(0 <= from && from < n_);
 
   auto ancestors = GenerateShortestPathAncestors(from);
