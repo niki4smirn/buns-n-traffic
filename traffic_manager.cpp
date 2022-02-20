@@ -132,7 +132,7 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
   return res;
 }
 
-int TrafficManager::GetLenForPath(const std::vector<Edge>& path) {
+int TrafficManager::GetLenForPath(const std::vector<Graph::Edge>& path) {
   // maybe int64_t
   int total_len = 0;
   for (const auto&[_, len] : path) {

@@ -3,23 +3,7 @@
 #include <vector>
 #include <queue>
 
-struct Edge {
-  int to{0};
-  int len{0};
-};
-
-class Graph {
- public:
-  std::vector<Edge> GetShortestPath(int from, int to) const {
-    return {};
-  }
-  std::vector<std::vector<Edge>> GetShortestPaths(int from) const {
-    return {};
-  }
-  std::vector<Edge> GetEdges(int from) const {
-    return {};
-  }
-};
+#include "graph.h"
 
 class TrafficManager {
  public:
@@ -51,7 +35,7 @@ class TrafficManager {
  private:
   void MoveBuns(int from, int to, int count);
   int MoveClosestVehicles(int to, int count);
-  static int GetLenForPath(const std::vector<Edge>& path);
+  static int GetLenForPath(const std::vector<Graph::Edge>& path);
 
   struct ArrivalAction {
     int timestamp{0};
