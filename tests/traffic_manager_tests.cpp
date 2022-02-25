@@ -145,7 +145,45 @@ TEST(TrafficManager, Setters) {
 }
 
 TEST(TrafficManager, Getters) {
+  {
+    Graph graph(4);
+    std::vector<int> buns_amounts = {1, 2, 3, 42};
+    std::vector<int> vehicles = {42, 1, 4, 8};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+    auto got_buns_amounts = traffic_manager.GetBunsAmounts();
+    auto got_vehicles = traffic_manager.GetVehicles();
+    for (int i = 0; i < 4; ++i) {
+      EXPECT_EQ(got_buns_amounts[i], traffic_manager.GetBunsAmount(i));
+      EXPECT_EQ(got_vehicles[i], traffic_manager.GetVehicle(i));
+    }
+  }
+  {
+    Graph graph(4);
+    std::vector<int> buns_amounts = {1, 2, 3, 42};
+    std::vector<int> vehicles = {42, 1, 4, 8};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+    EXPECT_DEATH(traffic_manager.GetBunsAmount(-1), "");
+    EXPECT_DEATH(traffic_manager.GetBunsAmount(-2), "");
+    EXPECT_DEATH(traffic_manager.GetBunsAmount(4), "");
+    EXPECT_DEATH(traffic_manager.GetBunsAmount(5), "");
+    EXPECT_DEATH(traffic_manager.GetBunsAmount(100), "");
 
+    EXPECT_DEATH(traffic_manager.GetVehicle(-1), "");
+    EXPECT_DEATH(traffic_manager.GetVehicle(-2), "");
+    EXPECT_DEATH(traffic_manager.GetVehicle(4), "");
+    EXPECT_DEATH(traffic_manager.GetVehicle(5), "");
+    EXPECT_DEATH(traffic_manager.GetVehicle(100), "");
+  }
 }
 
 TEST(TrafficManager, MoveVehicles) {
