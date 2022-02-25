@@ -33,6 +33,8 @@ class TrafficManager {
   int TransportWithReturns(int from, int to, int buns_amount);
 
  private:
+  friend class TrafficManagerTester;
+
   void MoveBuns(int from, int to, int count);
   int MoveClosestVehicles(int to, int count);
   static int GetLenForPath(const std::vector<Graph::Edge>& path);
