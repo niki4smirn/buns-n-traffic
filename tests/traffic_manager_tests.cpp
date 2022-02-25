@@ -83,6 +83,68 @@ TEST(TrafficManager, Constructor) {
 }
 
 TEST(TrafficManager, Setters) {
+  {
+    Graph graph(4);
+    std::vector<int> buns_amounts = {1, 2, 3, 42};
+    std::vector<int> vehicles = {42, 1, 4, 8};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+    std::vector<int> new_buns_amounts = {2, 14, 7, 5};
+    std::vector<int> new_vehicles = {6, 5, 0, 12};
+    traffic_manager.SetBunsAmounts(new_buns_amounts);
+    traffic_manager.SetVehicles(new_vehicles);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), new_buns_amounts);
+    EXPECT_EQ(traffic_manager.GetVehicles(), new_vehicles);
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 28);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 23);
+  }
+  {
+    Graph graph(4);
+    std::vector<int> buns_amounts = {1, 2, 3, 42};
+    std::vector<int> vehicles = {42, 1, 4, 8};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+    std::vector<int> new_buns_amounts = {1, 2, 1, 42};
+    std::vector<int> new_vehicles = {40, 1, 4, 8};
+    traffic_manager.SetBunsAmount(2, 1);
+    traffic_manager.SetVehicle(0, 40);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), new_buns_amounts);
+    EXPECT_EQ(traffic_manager.GetVehicles(), new_vehicles);
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 46);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 53);
+  }
+  {
+    Graph graph(2);
+    std::vector<int> buns_amounts = {0, 0};
+    std::vector<int> vehicles = {0, 0};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+    std::vector<int> new_buns_amounts = {4, 11};
+    std::vector<int> new_vehicles = {8, 6};
+    traffic_manager.SetBunsAmount(0, 4);
+    traffic_manager.SetBunsAmount(1, 11);
+    traffic_manager.SetVehicle(0, 8);
+    traffic_manager.SetVehicle(1, 6);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), new_buns_amounts);
+    EXPECT_EQ(traffic_manager.GetVehicles(), new_vehicles);
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 15);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 14);
+  }
+}
+
+TEST(TrafficManager, Getters) {
 
 }
 
