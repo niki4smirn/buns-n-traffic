@@ -361,8 +361,10 @@ TEST(TrafficManager, Transport) {
         vehicle_capacity);
 
     EXPECT_EQ(traffic_manager.Transport(1, 0, 15), 13);
-    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({15, 1, 0, 0, 0}));
-    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({4, 0, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(),
+              std::vector<int>({15, 1, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetVehicles(),
+              std::vector<int>({4, 0, 0, 0, 0}));
     EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 16);
     EXPECT_EQ(traffic_manager.GetTotalVehicles(), 4);
   }
