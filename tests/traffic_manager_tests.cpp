@@ -275,16 +275,20 @@ TEST(TrafficManager, MoveVehicles) {
   }
 }
 
+Graph GenerateTransportTestGraph() {
+  std::vector<std::vector<Graph::Edge>> connections = {
+      {Graph::Edge(1, 10)},
+      {Graph::Edge(0, 10), Graph::Edge(2, 1), Graph::Edge(3, 2), Graph::Edge(4, 3)},
+      {Graph::Edge(1, 1)},
+      {Graph::Edge(1, 2)},
+      {Graph::Edge(1, 3)}};
+
+  return Graph{connections};
+}
+
 TEST(TrafficManager, Transport) {
   {
-    std::vector<std::vector<Graph::Edge>> connections = {
-        {Graph::Edge(1, 10)},
-        {Graph::Edge(0, 10), Graph::Edge(2, 1), Graph::Edge(3, 2), Graph::Edge(4, 3)},
-        {Graph::Edge(1, 1)},
-        {Graph::Edge(1, 2)},
-        {Graph::Edge(1, 3)}};
-
-    Graph graph(connections);
+    Graph graph = GenerateTransportTestGraph();
 
     std::vector<int> buns_amounts = {1, 14, 1, 1, 1};
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
@@ -302,14 +306,7 @@ TEST(TrafficManager, Transport) {
     EXPECT_EQ(traffic_manager.GetTotalVehicles(), 84);
   }
   {
-    std::vector<std::vector<Graph::Edge>> connections = {
-        {Graph::Edge(1, 10)},
-        {Graph::Edge(0, 10), Graph::Edge(2, 1), Graph::Edge(3, 2), Graph::Edge(4, 3)},
-        {Graph::Edge(1, 1)},
-        {Graph::Edge(1, 2)},
-        {Graph::Edge(1, 3)}};
-
-    Graph graph(connections);
+    Graph graph = GenerateTransportTestGraph();
 
     std::vector<int> buns_amounts = {1, 15, 1, 1, 1};
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
@@ -327,14 +324,7 @@ TEST(TrafficManager, Transport) {
     EXPECT_EQ(traffic_manager.GetTotalVehicles(), 84);
   }
   {
-    std::vector<std::vector<Graph::Edge>> connections = {
-        {Graph::Edge(1, 10)},
-        {Graph::Edge(0, 10), Graph::Edge(2, 1), Graph::Edge(3, 2), Graph::Edge(4, 3)},
-        {Graph::Edge(1, 1)},
-        {Graph::Edge(1, 2)},
-        {Graph::Edge(1, 3)}};
-
-    Graph graph(connections);
+    Graph graph = GenerateTransportTestGraph();
 
     std::vector<int> buns_amounts = {1, 15, 1, 1, 1};
     std::vector<int> vehicles = {0, 0, 1, 1, 0};
@@ -352,14 +342,7 @@ TEST(TrafficManager, Transport) {
     EXPECT_EQ(traffic_manager.GetTotalVehicles(), 2);
   }
   {
-    std::vector<std::vector<Graph::Edge>> connections = {
-        {Graph::Edge(1, 10)},
-        {Graph::Edge(0, 10), Graph::Edge(2, 1), Graph::Edge(3, 2), Graph::Edge(4, 3)},
-        {Graph::Edge(1, 1)},
-        {Graph::Edge(1, 2)},
-        {Graph::Edge(1, 3)}};
-
-    Graph graph(connections);
+    Graph graph = GenerateTransportTestGraph();
 
     std::vector<int> buns_amounts = {0, 16, 0, 0, 0};
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
@@ -377,14 +360,7 @@ TEST(TrafficManager, Transport) {
     EXPECT_EQ(traffic_manager.GetTotalVehicles(), 4);
   }
   {
-    std::vector<std::vector<Graph::Edge>> connections = {
-        {Graph::Edge(1, 10)},
-        {Graph::Edge(0, 10), Graph::Edge(2, 1), Graph::Edge(3, 2), Graph::Edge(4, 3)},
-        {Graph::Edge(1, 1)},
-        {Graph::Edge(1, 2)},
-        {Graph::Edge(1, 3)}};
-
-    Graph graph(connections);
+    Graph graph = GenerateTransportTestGraph();
 
     std::vector<int> buns_amounts = {0, 16, 0, 0, 0};
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
@@ -403,6 +379,197 @@ TEST(TrafficManager, Transport) {
   }
 }
 
-TEST(TrafficManager, TransportWithReturns) {
+Graph GenerateTransportWithReturnsTestGraph() {
+  std::vector<std::vector<Graph::Edge>> connections = {
+      {Graph::Edge(1, 2)},
+      {Graph::Edge(0, 2), Graph::Edge(2, 1), Graph::Edge(3, 6), Graph::Edge(4, 7)},
+      {Graph::Edge(1, 1)},
+      {Graph::Edge(1, 6)},
+      {Graph::Edge(1, 7)}};
 
+  return Graph{connections};
+}
+
+TEST(TrafficManager, TransportWithReturns) {
+  {
+    Graph graph = GenerateTransportTestGraph();
+
+    std::vector<int> buns_amounts = {1, 14, 1, 1, 1};
+    std::vector<int> vehicles = {14, 14, 14, 28, 14};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 12), 10);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({13, 2, 1, 1, 1}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({15, 13, 14, 28, 14}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 18);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 84);
+  }
+  {
+    Graph graph = GenerateTransportTestGraph();
+
+    std::vector<int> buns_amounts = {1, 15, 1, 1, 1};
+    std::vector<int> vehicles = {14, 14, 14, 28, 14};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 15), 10);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({16, 0, 1, 1, 1}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({16, 12, 14, 28, 14}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 19);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 84);
+  }
+  {
+    Graph graph = GenerateTransportTestGraph();
+
+    std::vector<int> buns_amounts = {1, 15, 1, 1, 1};
+    std::vector<int> vehicles = {0, 0, 1, 1, 0};
+    int vehicle_capacity = 13;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 15), 12);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({16, 0, 1, 1, 1}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({2, 0, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 19);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 2);
+  }
+  {
+    Graph graph = GenerateTransportTestGraph();
+
+    std::vector<int> buns_amounts = {0, 16, 0, 0, 0};
+    std::vector<int> vehicles = {1, 0, 1, 1, 1};
+    int vehicle_capacity = 5;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 15), 13);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({15, 1, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({4, 0, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 16);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 4);
+  }
+  {
+    Graph graph = GenerateTransportTestGraph();
+
+    std::vector<int> buns_amounts = {0, 16, 0, 0, 0};
+    std::vector<int> vehicles = {1, 0, 1, 1, 1};
+    int vehicle_capacity = 5;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 16), 20);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({16, 0, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({4, 0, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 16);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 4);
+  }
+
+  {
+    Graph graph = GenerateTransportWithReturnsTestGraph();
+
+    std::vector<int> buns_amounts = {1, 14, 1, 1, 1};
+    std::vector<int> vehicles = {14, 14, 14, 28, 14};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 12), 2);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({13, 2, 1, 1, 1}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({15, 13, 14, 28, 14}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 18);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 84);
+  }
+  {
+    Graph graph = GenerateTransportWithReturnsTestGraph();
+
+    std::vector<int> buns_amounts = {1, 15, 1, 1, 1};
+    std::vector<int> vehicles = {14, 14, 14, 28, 14};
+    int vehicle_capacity = 14;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 15), 2);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({16, 0, 1, 1, 1}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({16, 12, 14, 28, 14}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 19);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 84);
+  }
+  {
+    Graph graph = GenerateTransportWithReturnsTestGraph();
+
+    std::vector<int> buns_amounts = {1, 15, 1, 1, 1};
+    std::vector<int> vehicles = {0, 0, 1, 1, 0};
+    int vehicle_capacity = 13;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 15), 7);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({16, 0, 1, 1, 1}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({1, 0, 0, 1, 0}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 19);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 2);
+  }
+  {
+    Graph graph = GenerateTransportWithReturnsTestGraph();
+
+    std::vector<int> buns_amounts = {0, 16, 0, 0, 0};
+    std::vector<int> vehicles = {1, 0, 1, 1, 1};
+    int vehicle_capacity = 5;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 15), 7);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({15, 1, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({1, 1, 0, 1, 1}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 16);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 4);
+  }
+  {
+    Graph graph = GenerateTransportWithReturnsTestGraph();
+
+    std::vector<int> buns_amounts = {0, 16, 0, 0, 0};
+    std::vector<int> vehicles = {1, 0, 1, 1, 1};
+    int vehicle_capacity = 5;
+    TrafficManager traffic_manager(
+        graph,
+        buns_amounts,
+        vehicles,
+        vehicle_capacity);
+
+    EXPECT_EQ(traffic_manager.TransportWithReturns(1, 0, 16), 8);
+    EXPECT_EQ(traffic_manager.GetBunsAmounts(), std::vector<int>({16, 0, 0, 0, 0}));
+    EXPECT_EQ(traffic_manager.GetVehicles(), std::vector<int>({2, 1, 0, 0, 1}));
+    EXPECT_EQ(traffic_manager.GetTotalBunsAmount(), 16);
+    EXPECT_EQ(traffic_manager.GetTotalVehicles(), 4);
+  }
 }

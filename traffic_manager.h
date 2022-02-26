@@ -51,7 +51,10 @@ class TrafficManager {
   using ActionsQueue = std::priority_queue<ArrivalAction,
                                            std::vector<ArrivalAction>,
                                            std::greater<>>;
-  ActionsQueue InitActionsQueue(int from) const;
+  ActionsQueue InitActionsQueue(
+      int start_town,
+      int finish_town,
+      int main_path_len) const;
 
  private:
   Graph graph_;

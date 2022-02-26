@@ -157,15 +157,24 @@ bool TrafficManager::ArrivalAction::operator>(
   return timestamp > arrival_action.timestamp;
 }
 
-TrafficManager::ActionsQueue TrafficManager::InitActionsQueue(int from) const {
+TrafficManager::ActionsQueue TrafficManager::InitActionsQueue(
+    int start_town,
+    int finish_town,
+    int main_path_len) const {
   ActionsQueue actions_queue;
-  auto paths = graph_.GetShortestPaths(from);
+  auto paths = graph_.GetShortestPaths(start_town);
   int cur_town_index = 0;
+  actions_queue.push({0,
+                      vehicles_[start_town],
+                      start_town,
+                      start_town});
   for (const auto& path : paths) {
-    actions_queue.push({GetLenForPath(path),
-                        vehicles_[cur_town_index],
-                        cur_town_index,
-                        from});
+    if (cur_town_index != start_town) {
+      actions_queue.push({GetLenForPath(path) + main_path_len,
+                          vehicles_[cur_town_index],
+                          cur_town_index,
+                          finish_town});
+    }
     ++cur_town_index;
   }
   return actions_queue;
@@ -176,8 +185,8 @@ int TrafficManager::TransportWithReturns(int from, int to, int buns_amount) {
   assert(0 <= to && to < vehicles_.size());
   assert(buns_amounts_[from] >= buns_amount);
   int result = 0;
-  auto actions_queue = InitActionsQueue(from);
   int main_path_len = GetLenForPath(graph_.GetShortestPath(from, to));
+  auto actions_queue = InitActionsQueue(from, to, main_path_len);
   int vehicles_needed = ceil(1. * buns_amount / vehicle_capacity_);
   while (!actions_queue.empty()) {
     auto[timestamp, vehicles_count, cur_from, cur_to] = actions_queue.top();
@@ -192,6 +201,8 @@ int TrafficManager::TransportWithReturns(int from, int to, int buns_amount) {
     } else {
       vehicles_needed -= vehicles_count;
       if (vehicles_needed <= 0) {
+        int to_return = -vehicles_needed;
+        MoveVehicles(cur_to, cur_from, to_return);
         break;
       }
       actions_queue.push({timestamp + main_path_len,
