@@ -77,6 +77,9 @@ void TrafficManager::SetVehicle(int town, int vehicle) {
 int TrafficManager::MoveVehicles(int from, int to, int count) {
   assert(0 <= from && from < vehicles_.size());
   assert(0 <= to && to < vehicles_.size());
+  if (count == 0) {
+    return 0;
+  }
   vehicles_[from] -= count;
   vehicles_[to] += count;
   return GetLenForPath(graph_.GetShortestPath(from, to));
@@ -95,8 +98,8 @@ int TrafficManager::Transport(int from, int to, int buns_amount) {
 }
 
 struct PathToTownInfo {
-  int town_index{0};
   int length{0};
+  int town_index{0};
 
   std::strong_ordering operator<=>(
       const PathToTownInfo& path_to_town_info) const = default;
@@ -117,15 +120,18 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
     int cur_move_count = std::min(vehicles_[town_index], count);
     res = MoveVehicles(town_index, to, cur_move_count);
     count -= cur_move_count;
-    for (auto[next_vertex, len] : graph_.GetEdges(town_index)) {
-      bool can_update_existing =
-          distance[next_vertex] > len + distance[town_index];
-      if (can_update_existing) {
-        towns_queue.erase({distance[next_vertex], next_vertex});
+    for (auto[next_node, len] : graph_.GetEdges(town_index)) {
+      bool can_update_existing = false;
+      if (distance.contains(next_node) &&
+          distance[next_node] > len + distance[town_index]) {
+        can_update_existing = true;
       }
-      if (!distance.contains(next_vertex) || can_update_existing) {
-        distance[next_vertex] = distance[town_index] + len;
-        towns_queue.insert({distance[next_vertex], next_vertex});
+      if (can_update_existing) {
+        towns_queue.erase({distance[next_node], next_node});
+      }
+      if (!distance.contains(next_node) || can_update_existing) {
+        distance[next_node] = distance[town_index] + len;
+        towns_queue.insert({distance[next_node], next_node});
       }
     }
   }
