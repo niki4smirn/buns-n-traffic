@@ -7,12 +7,10 @@
 
 #include "graph.h"
 
-Graph::Edge::Edge(int to_, int length_) : to(to_), length(length_) {}
-
 Graph::Graph(std::vector<std::vector<Edge>> list)
-    : connections_(std::move(list)), n_(connections_.size()) {}
+    : AbstractGraph(list.size()), connections_(std::move(list)) {}
 
-Graph::Graph(int n) : n_(n) {
+Graph::Graph(int n) : AbstractGraph(n) {
   connections_.resize(n);
 
   for (int i = 0; i < n; ++i) {
@@ -24,31 +22,11 @@ Graph::Graph(int n) : n_(n) {
   }
 }
 
-int Graph::GetEdgeLength(int from, int to) const {
-  assert(0 <= from && from < n_);
-  assert(0 <= to && to < n_);
-
-  auto edge = std::find_if(GetEdges(from).begin(),
-                           GetEdges(from).end(),
-                           [to](Edge edge) {
-                             return edge.to == to;
-                           });
-
-  if (edge == GetEdges(from).end()) {
-    return 0;
-  }
-
-  return edge->length;
-}
 
 const std::vector<Graph::Edge>& Graph::GetEdges(int from) const {
   assert(0 <= from && from < n_);
 
   return connections_[from];
-}
-
-int Graph::GetSize() const {
-  return n_;
 }
 
 std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {

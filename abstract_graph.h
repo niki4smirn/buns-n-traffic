@@ -13,6 +13,7 @@ class AbstractGraph {
     int length;
   };
 
+  AbstractGraph() = default;
   explicit AbstractGraph(int n);
 
   virtual const std::vector<Edge>& GetEdges(int from) const = 0;
