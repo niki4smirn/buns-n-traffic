@@ -45,3 +45,7 @@ std::vector<Clique::Edge> Clique::GetEdges(int from) const {
   }
   return result;
 }
+
+int Clique::GetEdgesCount() const {
+  return n_ * (n_ - 1) / 2;
+}
