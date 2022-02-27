@@ -28,6 +28,8 @@ class AbstractGraph {
 
   int GetSize() const;
 
+  virtual ~AbstractGraph() = default;
+
  protected:
   int n_{0};
 };
