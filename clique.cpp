@@ -12,7 +12,6 @@ Clique::Clique(int n) : AbstractGraph(n) {
         adjacency_matrix_[i][j] = 1;
       }
     }
-
   }
 }
 

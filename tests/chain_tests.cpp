@@ -141,7 +141,7 @@ std::optional<int> GetPathLength(
     int from) {
   int distance = 0;
 
-  for (const auto& edge: path) {
+  for (const auto& edge : path) {
     if (graph.GetEdgeLength(from, edge.to) == edge.length) {
       distance += edge.length;
       from = edge.to;

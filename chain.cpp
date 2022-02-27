@@ -31,7 +31,7 @@ int GetBoundIndex(
 }
 
 Chain::Chain(const std::vector<std::vector<Edge>>& list) :
-    AbstractGraph(list.size()){
+    AbstractGraph(list.size()) {
   for (int i = 0; i < n_; ++i) {
     assert(list[i].size() == 1 ||
         list[i].size() == 2);
