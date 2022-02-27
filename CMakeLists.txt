@@ -17,6 +17,8 @@ add_executable(Test
         clique.cpp
         chain.cpp
         tests/graph_tests.cpp
-        tests/clique_tests.cpp)
+        tests/clique_tests.cpp
+        tests/chain_tests.cpp
+        )
 
 target_link_libraries(Test gtest_main)

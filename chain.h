@@ -10,6 +10,7 @@ class Chain : public AbstractGraph{
   // creates chain graph with n vertices and every edge's len = 1
   explicit Chain(int n);
   explicit Chain(const std::vector<std::vector<Edge>>& list);
+  // if edges_len_list is empty, creates one node
   explicit Chain(const std::vector<int>& edges_len_list);
 
 

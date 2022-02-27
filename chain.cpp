@@ -101,11 +101,11 @@ std::vector<Chain::Edge> Chain::GetEdges(int from) const {
   int internal_from = from_input_to_internal_[from];
   if (internal_from > 0) {
     int to = from_internal_to_input_[internal_from - 1];
-    result.emplace_back(to, GetEdgeLength(from, to));
+    result.emplace_back(to, nodes_list_[internal_from].left_len.value());
   }
   if (internal_from + 1 < n_) {
     int to = from_internal_to_input_[internal_from + 1];
-    result.emplace_back(to, GetEdgeLength(from, to));
+    result.emplace_back(to, nodes_list_[internal_from].right_len.value());
   }
   return result;
 }
@@ -128,19 +128,23 @@ std::vector<std::vector<Chain::Edge>> Chain::GetShortestPaths(int from) const {
 }
 
 std::vector<Chain::Edge> Chain::GetAnyPath(int from, int to) const {
+  if (from == to) {
+    return {};
+  }
   int internal_from = from_input_to_internal_[from];
   int internal_to = from_input_to_internal_[to];
-  if (internal_to < internal_from) {
-    std::swap(internal_from, internal_to);
-  }
 
   std::vector<Edge> res;
-  for (int cur = internal_from + 1; cur <= internal_to; ++cur) {
-    res.emplace_back(from_internal_to_input_[cur],
-                     nodes_list_[cur].left_len.value());
-  }
-  if (res.back().to != to) {
-    std::reverse(res.begin(), res.end());
+  if (internal_from < internal_to) {
+    for (int cur = internal_from + 1; cur <= internal_to; ++cur) {
+      res.emplace_back(from_internal_to_input_[cur],
+                       nodes_list_[cur].left_len.value());
+    }
+  } else {
+    for (int cur = internal_from - 1; cur >= internal_to; --cur) {
+      res.emplace_back(from_internal_to_input_[cur],
+                       nodes_list_[cur].right_len.value());
+    }
   }
   return res;
 }
