@@ -24,6 +24,13 @@ TEST(Clique, Constructors) {
     }
   }
   {
+    std::vector<std::vector<Clique::Edge>> connections = {};
+
+    Clique graph(connections);
+    ASSERT_EQ(graph.GetEdgesCount(), 0);
+    ASSERT_EQ(graph.GetSize(), 0);
+  }
+  {
     std::vector<std::vector<Clique::Edge>> connections = {
         {Clique::Edge(1, 1), Clique::Edge(2, 1), Clique::Edge(3, 1)},
         {Clique::Edge(0, 1), Clique::Edge(2, 1), Clique::Edge(3, 1)},
@@ -41,6 +48,36 @@ TEST(Clique, Constructors) {
         ASSERT_EQ(graph1.GetEdgeLength(from, to),
                   graph2.GetEdgeLength(from, to));
       }
+    }
+  }
+  {
+    std::vector<std::vector<int>> matrix = {};
+
+    Clique graph(matrix);
+    ASSERT_EQ(graph.GetEdgesCount(), 0);
+    ASSERT_EQ(graph.GetSize(), 0);
+  }
+  {
+    std::vector<std::vector<Clique::Edge>> connections = {
+        {Clique::Edge(1, 1), Clique::Edge(2, 2), Clique::Edge(3, 3)},
+        {Clique::Edge(0, 1), Clique::Edge(2, 3), Clique::Edge(3, 4)},
+        {Clique::Edge(0, 2), Clique::Edge(1, 3), Clique::Edge(3, 5)},
+        {Clique::Edge(0, 3), Clique::Edge(1, 4), Clique::Edge(2, 5)},
+    };
+
+    Clique graph1(connections);
+
+    std::vector<std::vector<int>> matrix = {
+        {0, 1, 2, 3},
+        {1, 0, 3, 4},
+        {2, 3, 0, 5},
+        {3, 4, 5, 0}
+    };
+    Clique graph2(matrix);
+    ASSERT_EQ(graph2.GetSize(), 4);
+    ASSERT_EQ(graph2.GetEdgesCount(), 6);
+    for (int from = 0; from < 4; ++from) {
+      ASSERT_EQ(graph1.GetEdges(from), graph2.GetEdges(from));
     }
   }
 }
