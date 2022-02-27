@@ -11,6 +11,11 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_executable(Test graph.cpp tests/graph_tests.cpp abstract_graph.cpp)
+add_executable(Test
+        abstract_graph.cpp
+        graph.cpp
+        clique.cpp
+        tests/graph_tests.cpp
+        )
 
 target_link_libraries(Test gtest_main)
