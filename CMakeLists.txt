@@ -16,9 +16,16 @@ add_executable(Test
         graph.cpp
         clique.cpp
         chain.cpp
+        
+        traffic_manager.cpp
+        graph.cpp
+        
         tests/graph_tests.cpp
         tests/clique_tests.cpp
         tests/chain_tests.cpp
+        
+        tests/graph_tests.cpp
+        tests/traffic_manager_tests.cpp
         )
 
 target_link_libraries(Test gtest_main)
