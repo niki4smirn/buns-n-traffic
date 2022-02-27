@@ -6,8 +6,7 @@ Chain::Chain(int n) : AbstractGraph(n) {
   ResizeInternalVectors(n_);
   for (int i = 0; i < n_; ++i) {
     dist_prefix_[i] = i;
-    from_input_to_internal_[i] = i;
-    from_internal_to_input_[i] = i;
+    AddMappingPair(i, i);
   }
 }
 
@@ -76,4 +75,15 @@ void Chain::FillInternalVectors(
 void Chain::AddMappingPair(int input_index, int internal_index) {
   from_input_to_internal_[input_index] = internal_index;
   from_internal_to_input_[internal_index] = input_index;
+}
+
+Chain::Chain(const std::vector<int>& edges_len_list) :
+    AbstractGraph(edges_len_list.size() + 1) {
+  ResizeInternalVectors(n_);
+  for (int i = 0; i < n_; ++i) {
+    AddMappingPair(i, i);
+    if (i > 0) {
+      dist_prefix_[i] = edges_len_list[i - 1] + dist_prefix_[i - 1];
+    }
+  }
 }
