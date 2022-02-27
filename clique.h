@@ -19,5 +19,10 @@ class Clique : public AbstractGraph {
   std::vector<std::vector<Edge>> GetShortestPaths(int from) const override;
 
  private:
+  std::vector<int> GenerateShortestPathAncestors(int from) const;
+  std::vector<Edge> RestorePath(
+      const std::vector<int>& ancestors,
+      int to) const;
+
   std::vector<std::vector<int>> adjacency_matrix_;
 };
