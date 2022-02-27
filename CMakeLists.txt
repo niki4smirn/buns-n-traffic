@@ -16,6 +16,6 @@ add_executable(Test
         graph.cpp
         clique.cpp
         tests/graph_tests.cpp
-        )
+        tests/clique_tests.cpp)
 
 target_link_libraries(Test gtest_main)
