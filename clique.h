@@ -13,7 +13,6 @@ class Clique : public AbstractGraph {
 
   int GetEdgesCount() const override;
 
-  // uses BFS algorithm
   std::vector<Edge> GetAnyPath(int from, int to) const override;
   std::vector<Edge> GetShortestPath(int from, int to) const override;
   std::vector<std::vector<Edge>> GetShortestPaths(int from) const override;

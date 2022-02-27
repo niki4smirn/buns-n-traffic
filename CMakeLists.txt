@@ -15,6 +15,7 @@ add_executable(Test
         abstract_graph.cpp
         graph.cpp
         clique.cpp
+        chain.cpp
         tests/graph_tests.cpp
         tests/clique_tests.cpp)
 
