@@ -113,3 +113,34 @@ std::vector<Chain::Edge> Chain::GetEdges(int from) const {
 int Chain::GetEdgesCount() const {
   return std::max(n_ - 1, 0);
 }
+
+std::vector<Chain::Edge> Chain::GetShortestPath(int from, int to) const {
+  return GetAnyPath(from, to);
+}
+
+std::vector<std::vector<Chain::Edge>> Chain::GetShortestPaths(int from) const {
+  std::vector<std::vector<Edge>> res;
+  res.reserve(n_);
+  for (int to = 0; to < n_; ++to) {
+    res.push_back(GetShortestPath(from, to));
+  }
+  return res;
+}
+
+std::vector<Chain::Edge> Chain::GetAnyPath(int from, int to) const {
+  int internal_from = from_input_to_internal_[from];
+  int internal_to = from_input_to_internal_[to];
+  if (internal_to < internal_from) {
+    std::swap(internal_from, internal_to);
+  }
+
+  std::vector<Edge> res;
+  for (int cur = internal_from + 1; cur <= internal_to; ++cur) {
+    res.emplace_back(from_internal_to_input_[cur],
+                     nodes_list_[cur].left_len.value());
+  }
+  if (res.back().to != to) {
+    std::reverse(res.begin(), res.end());
+  }
+  return res;
+}
