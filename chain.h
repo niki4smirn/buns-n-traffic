@@ -19,6 +19,11 @@ class Chain : public AbstractGraph{
   std::vector<std::vector<Edge>> GetShortestPaths(int from) const override;
 
  private:
+  void ResizeInternalVectors(int size);
+  void FillInternalVectors(int cur_index,
+                           const std::vector<std::vector<Edge>>& list);
+  void AddMappingPair(int input_index, int internal_index);
+
   std::vector<int> dist_prefix_;
   std::vector<int> from_input_to_internal_;
   std::vector<int> from_internal_to_input_;
