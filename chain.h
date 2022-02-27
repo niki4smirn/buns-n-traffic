@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "abstract_graph.h"
 
 class Chain : public AbstractGraph{
@@ -25,9 +27,12 @@ class Chain : public AbstractGraph{
                            const std::vector<std::vector<Edge>>& list);
   void AddMappingPair(int input_index, int internal_index);
 
-  std::vector<int> dist_prefix_;
+  struct ChainNode {
+    std::optional<int> left_len{std::nullopt};
+    std::optional<int> right_len{std::nullopt};
+  };
+
+  std::vector<ChainNode> nodes_list_;
   std::vector<int> from_input_to_internal_;
   std::vector<int> from_internal_to_input_;
 };
-
-

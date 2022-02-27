@@ -5,7 +5,12 @@
 Chain::Chain(int n) : AbstractGraph(n) {
   ResizeInternalVectors(n_);
   for (int i = 0; i < n_; ++i) {
-    dist_prefix_[i] = i;
+    if (i > 0) {
+      nodes_list_[i].left_len = 1;
+    }
+    if (i + 1 < n) {
+      nodes_list_[i].right_len = 1;
+    }
     AddMappingPair(i, i);
   }
 }
@@ -40,7 +45,7 @@ Chain::Chain(const std::vector<std::vector<Edge>>& list) :
 }
 
 void Chain::ResizeInternalVectors(int size) {
-  dist_prefix_.resize(size);
+  nodes_list_.resize(size);
   from_input_to_internal_.resize(size);
   from_internal_to_input_.resize(size);
 }
@@ -65,9 +70,9 @@ void Chain::FillInternalVectors(
     }
     cur_index = next_edge.to;
 
-    dist_prefix_[internal_index + 1] =
-        dist_prefix_[internal_index] + next_edge.length;
+    nodes_list_[internal_index].right_len = next_edge.length;
     ++internal_index;
+    nodes_list_[internal_index].left_len = next_edge.length;
     AddMappingPair(cur_index, internal_index);
   } while (list[cur_index].size() == 2);
 }
@@ -83,7 +88,28 @@ Chain::Chain(const std::vector<int>& edges_len_list) :
   for (int i = 0; i < n_; ++i) {
     AddMappingPair(i, i);
     if (i > 0) {
-      dist_prefix_[i] = edges_len_list[i - 1] + dist_prefix_[i - 1];
+      nodes_list_[i].left_len = edges_len_list[i - 1];
+    }
+    if (i + 1 < n_) {
+      nodes_list_[i].right_len = edges_len_list[i];
     }
   }
+}
+
+std::vector<Chain::Edge> Chain::GetEdges(int from) const {
+  std::vector<Edge> result;
+  int internal_from = from_input_to_internal_[from];
+  if (internal_from > 0) {
+    int to = from_internal_to_input_[internal_from - 1];
+    result.emplace_back(to, GetEdgeLength(from, to));
+  }
+  if (internal_from + 1 < n_) {
+    int to = from_internal_to_input_[internal_from + 1];
+    result.emplace_back(to, GetEdgeLength(from, to));
+  }
+  return result;
+}
+
+int Chain::GetEdgesCount() const {
+  return std::max(n_ - 1, 0);
 }
