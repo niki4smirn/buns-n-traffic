@@ -10,13 +10,14 @@ int AbstractGraph::GetEdgeLength(int from, int to) const {
   assert(0 <= from && from < n_);
   assert(0 <= to && to < n_);
 
-  auto edge = std::find_if(GetEdges(from).begin(),
-                           GetEdges(from).end(),
+  auto from_edges = GetEdges(from);
+  auto edge = std::find_if(from_edges.begin(),
+                           from_edges.end(),
                            [to](Edge edge) {
                              return edge.to == to;
                            });
 
-  if (edge == GetEdges(from).end()) {
+  if (edge == from_edges.end()) {
     return 0;
   }
 
