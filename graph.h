@@ -11,7 +11,7 @@ class Graph : public AbstractGraph {
   // creates complete graph with n vertices
   explicit Graph(int n);
 
-  const std::vector<Edge>& GetEdges(int from) const override;
+  std::vector<Edge> GetEdges(int from) const override;
 
   // returns vertices count
   int GetEdgesCount() const override;

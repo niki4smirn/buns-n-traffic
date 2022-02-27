@@ -9,7 +9,7 @@ class Clique : public AbstractGraph {
   explicit Clique(const std::vector<std::vector<Edge>>& list);
   explicit Clique(const std::vector<std::vector<int>>& adjacency_matrix);
 
-  const std::vector<Edge>& GetEdges(int from) const override;
+  std::vector<Edge> GetEdges(int from) const override;
 
   int GetEdgesCount() const override;
 

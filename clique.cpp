@@ -33,3 +33,15 @@ Clique::Clique(const std::vector<std::vector<int>>& adjacency_matrix) :
   }
   adjacency_matrix_ = adjacency_matrix;
 }
+
+std::vector<Clique::Edge> Clique::GetEdges(int from) const {
+  assert(0 <= from && from < adjacency_matrix_.size());
+  std::vector<Clique::Edge> result;
+  result.reserve(n_ - 1);
+  for (int i = 0; i < adjacency_matrix_[from].size(); ++i) {
+    if (i != from) {
+      result.emplace_back(i, adjacency_matrix_[from][i]);
+    }
+  }
+  return result;
+}

@@ -23,7 +23,7 @@ Graph::Graph(int n) : AbstractGraph(n) {
 }
 
 
-const std::vector<Graph::Edge>& Graph::GetEdges(int from) const {
+std::vector<Graph::Edge> Graph::GetEdges(int from) const {
   assert(0 <= from && from < n_);
 
   return connections_[from];
