@@ -3,12 +3,12 @@
 #include <vector>
 #include <queue>
 
-#include "graph.h"
+#include "abstract_graph.h"
 
 class TrafficManager {
  public:
   TrafficManager(
-      const Graph& graph,
+      const AbstractGraph* graph,
       std::vector<int> buns_amounts,
       std::vector<int> vehicles,
       int vehicle_capacity);
@@ -37,7 +37,7 @@ class TrafficManager {
 
   void MoveBuns(int from, int to, int count);
   int MoveClosestVehicles(int to, int count);
-  static int GetLenForPath(const std::vector<Graph::Edge>& path);
+  static int GetLenForPath(const std::vector<AbstractGraph::Edge>& path);
 
   struct ArrivalAction {
     int timestamp{0};
@@ -57,7 +57,7 @@ class TrafficManager {
       int main_path_len) const;
 
  private:
-  Graph graph_;
+  const AbstractGraph* graph_;
   std::vector<int> buns_amounts_;
   std::vector<int> vehicles_;
   int vehicle_capacity_{0};

@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 TrafficManager::TrafficManager(
-    const Graph& graph,
+    const AbstractGraph* graph,
     std::vector<int> buns_amounts,
     std::vector<int> vehicles,
     int vehicle_capacity) :
@@ -82,7 +82,7 @@ int TrafficManager::MoveVehicles(int from, int to, int count) {
   }
   vehicles_[from] -= count;
   vehicles_[to] += count;
-  return GetLenForPath(graph_.GetShortestPath(from, to));
+  return GetLenForPath(graph_->GetShortestPath(from, to));
 }
 
 int TrafficManager::Transport(int from, int to, int buns_amount) {
@@ -120,7 +120,7 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
     int cur_move_count = std::min(vehicles_[town_index], count);
     res = MoveVehicles(town_index, to, cur_move_count);
     count -= cur_move_count;
-    for (auto[next_node, len] : graph_.GetEdges(town_index)) {
+    for (auto[next_node, len] : graph_->GetEdges(town_index)) {
       bool can_update_existing = false;
       if (distance.contains(next_node) &&
           distance[next_node] > len + distance[town_index]) {
@@ -138,7 +138,8 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
   return res;
 }
 
-int TrafficManager::GetLenForPath(const std::vector<Graph::Edge>& path) {
+int TrafficManager::GetLenForPath(
+    const std::vector<AbstractGraph::Edge>& path) {
   // maybe int64_t
   int total_len = 0;
   for (const auto&[_, len] : path) {
@@ -162,7 +163,7 @@ TrafficManager::ActionsQueue TrafficManager::InitActionsQueue(
     int finish_town,
     int main_path_len) const {
   ActionsQueue actions_queue;
-  auto paths = graph_.GetShortestPaths(start_town);
+  auto paths = graph_->GetShortestPaths(start_town);
   int cur_town_index = 0;
   actions_queue.push({0,
                       vehicles_[start_town],
@@ -185,7 +186,7 @@ int TrafficManager::TransportWithReturns(int from, int to, int buns_amount) {
   assert(0 <= to && to < vehicles_.size());
   assert(buns_amounts_[from] >= buns_amount);
   int result = 0;
-  int main_path_len = GetLenForPath(graph_.GetShortestPath(from, to));
+  int main_path_len = GetLenForPath(graph_->GetShortestPath(from, to));
   auto actions_queue = InitActionsQueue(from, to, main_path_len);
   int vehicles_needed = ceil(1. * buns_amount / vehicle_capacity_);
   while (!actions_queue.empty()) {
