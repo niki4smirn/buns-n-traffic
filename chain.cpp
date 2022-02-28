@@ -37,9 +37,7 @@ Chain::Chain(const std::vector<std::vector<Edge>>& list) :
         list[i].size() == 2);
   }
   if (n_ != 0) {
-    std::vector<bool> used(n_);
     int bound_index = GetBoundIndex(list);
-    used.assign(n_, false);
     FillInternalVectors(bound_index, list);
   }
 }

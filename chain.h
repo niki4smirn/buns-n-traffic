@@ -13,7 +13,6 @@ class Chain : public AbstractGraph{
   // if edges_len_list is empty, creates one node
   explicit Chain(const std::vector<int>& edges_len_list);
 
-
   std::vector<Edge> GetEdges(int from) const override;
 
   int GetEdgesCount() const override;

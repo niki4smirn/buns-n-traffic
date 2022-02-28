@@ -18,13 +18,11 @@ add_executable(Test
         chain.cpp
         
         traffic_manager.cpp
-        graph.cpp
         
         tests/graph_tests.cpp
         tests/clique_tests.cpp
         tests/chain_tests.cpp
-        
-        tests/graph_tests.cpp
+
         tests/traffic_manager_tests.cpp
         )
 
