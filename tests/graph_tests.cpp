@@ -8,6 +8,17 @@ TEST(Graph, Constructors) {
     ASSERT_EQ(graph.GetSize(), 0);
   }
   {
+    Graph graph(0);
+
+    ASSERT_EQ(graph.GetSize(), 0);
+  }
+  {
+    std::vector<std::vector<Graph::Edge>> connections = {};
+    Graph graph(connections);
+
+    ASSERT_EQ(graph.GetSize(), 0);
+  }
+  {
     Graph graph(4);
     std::vector<std::vector<Graph::Edge>> connections = {
         {Graph::Edge(1, 1), Graph::Edge(2, 1), Graph::Edge(3, 1)},
