@@ -1,12 +1,13 @@
 #include <gtest/gtest.h>
 
+#include "../graph.h"
 #include "../traffic_manager.h"
 
 class TrafficManagerTester {
  public:
   explicit TrafficManagerTester(TrafficManager traffic_manager) :
       traffic_manager_(std::move(traffic_manager)) {}
-  Graph GetGraph() const {
+  const AbstractGraph* GetGraph() const {
     return traffic_manager_.graph_;
   }
 
@@ -18,7 +19,7 @@ class TrafficManagerTester {
   TrafficManager traffic_manager_;
 };
 
-bool operator==(const Graph& lhs, const Graph& rhs) {
+bool operator==(const AbstractGraph& lhs, const AbstractGraph& rhs) {
   if (lhs.GetSize() == rhs.GetSize()) {
     for (int from = 0; from < lhs.GetSize(); ++from) {
       if (lhs.GetEdges(from) != rhs.GetEdges(from)) {
@@ -37,12 +38,12 @@ TEST(TrafficManager, Constructor) {
     std::vector<int> vehicles;
     int vehicle_capacity = 0;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
     TrafficManagerTester tester(traffic_manager);
-    EXPECT_EQ(tester.GetGraph(), graph);
+    EXPECT_EQ(*tester.GetGraph(), graph);
     EXPECT_EQ(tester.GetVehicleCapacity(), vehicle_capacity);
     EXPECT_EQ(traffic_manager.GetBunsAmounts(), buns_amounts);
     EXPECT_EQ(traffic_manager.GetVehicles(), vehicles);
@@ -55,12 +56,12 @@ TEST(TrafficManager, Constructor) {
     std::vector<int> vehicles = {42, 1, 4, 8};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
     TrafficManagerTester tester(traffic_manager);
-    EXPECT_EQ(tester.GetGraph(), Graph({
+    EXPECT_EQ(*tester.GetGraph(), Graph({
                                            {Graph::Edge(1, 1),
                                             Graph::Edge(2, 1),
                                             Graph::Edge(3, 1)},
@@ -89,7 +90,7 @@ TEST(TrafficManager, Setters) {
     std::vector<int> vehicles = {42, 1, 4, 8};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -108,7 +109,7 @@ TEST(TrafficManager, Setters) {
     std::vector<int> vehicles = {42, 1, 4, 8};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -127,7 +128,7 @@ TEST(TrafficManager, Setters) {
     std::vector<int> vehicles = {0, 0};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -151,7 +152,7 @@ TEST(TrafficManager, Getters) {
     std::vector<int> vehicles = {42, 1, 4, 8};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -168,7 +169,7 @@ TEST(TrafficManager, Getters) {
     std::vector<int> vehicles = {42, 1, 4, 8};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -194,7 +195,7 @@ TEST(TrafficManager, MoveVehicles) {
     int total_vehicles_count = 55;
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -229,7 +230,7 @@ TEST(TrafficManager, MoveVehicles) {
     std::vector<int> vehicles = {14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -257,7 +258,7 @@ TEST(TrafficManager, MoveVehicles) {
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -295,7 +296,7 @@ TEST(TrafficManager, Transport) {
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -315,7 +316,7 @@ TEST(TrafficManager, Transport) {
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -335,7 +336,7 @@ TEST(TrafficManager, Transport) {
     std::vector<int> vehicles = {0, 0, 1, 1, 0};
     int vehicle_capacity = 13;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -355,7 +356,7 @@ TEST(TrafficManager, Transport) {
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
     int vehicle_capacity = 5;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -375,7 +376,7 @@ TEST(TrafficManager, Transport) {
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
     int vehicle_capacity = 5;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -410,7 +411,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -430,7 +431,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -450,7 +451,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {0, 0, 1, 1, 0};
     int vehicle_capacity = 13;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -470,7 +471,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
     int vehicle_capacity = 5;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -490,7 +491,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
     int vehicle_capacity = 5;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -511,7 +512,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -531,7 +532,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {14, 14, 14, 28, 14};
     int vehicle_capacity = 14;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -551,7 +552,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {0, 0, 1, 1, 0};
     int vehicle_capacity = 13;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -571,7 +572,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
     int vehicle_capacity = 5;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
@@ -591,7 +592,7 @@ TEST(TrafficManager, TransportWithReturns) {
     std::vector<int> vehicles = {1, 0, 1, 1, 1};
     int vehicle_capacity = 5;
     TrafficManager traffic_manager(
-        graph,
+        &graph,
         buns_amounts,
         vehicles,
         vehicle_capacity);
