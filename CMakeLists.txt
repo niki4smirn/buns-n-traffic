@@ -13,23 +13,29 @@ FetchContent_MakeAvailable(googletest)
 
 find_package(benchmark REQUIRED)
 
-add_executable(Test
+set(build_files
         abstract_graph.cpp
         graph.cpp
         clique.cpp
         chain.cpp
-        
+
         traffic_manager.cpp
-        
+        )
+
+add_executable(Test
+        ${build_files}
         tests/graph_tests.cpp
         tests/clique_tests.cpp
         tests/chain_tests.cpp
 
         tests/traffic_manager_tests.cpp
+        )
 
+add_executable(Benchmark
+        ${build_files}
         benchmarks/benchmark.cpp
         )
 
 target_link_libraries(Test gtest_main)
 
-target_link_libraries(Test benchmark::benchmark)
+target_link_libraries(Benchmark benchmark::benchmark)
