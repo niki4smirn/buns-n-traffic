@@ -11,6 +11,8 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+find_package(benchmark REQUIRED)
+
 add_executable(Test
         abstract_graph.cpp
         graph.cpp
@@ -24,6 +26,10 @@ add_executable(Test
         tests/chain_tests.cpp
 
         tests/traffic_manager_tests.cpp
+
+        benchmarks/benchmark.cpp
         )
 
 target_link_libraries(Test gtest_main)
+
+target_link_libraries(Test benchmark::benchmark)
