@@ -17,5 +17,5 @@ jobs:
         name: Setup Python
       - run: pip install cpplint
         name: Install cpplint
-      - run: cpplint --recursive --filter=-build/include,-runtime/int,-build/include_subdir,-legal/copyright,-build/c++20,-build/c++11 .
+      - run: cpplint --recursive --filter=-build/include,-runtime/int,-runtime/references,-build/include_subdir,-legal/copyright,-build/c++20,-build/c++11 .
         name: Run cpplint
