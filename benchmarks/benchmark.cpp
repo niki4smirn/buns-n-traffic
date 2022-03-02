@@ -68,27 +68,28 @@ static void BM_Transport(benchmark::State& state) {
   }
 }
 
-
+static void CustomArguments(benchmark::internal::Benchmark* b) {
+  std::vector<int> iterations_counts = {50000, 100000, 500000};
+  std::vector<int> graph_sizes = {10, 20, 100};
+  for (auto graph_size : graph_sizes) {
+    for (auto iterations_count : iterations_counts) {
+      b->Args({graph_size, iterations_count});
+    }
+  }
+}
 
 int main(int argc, char** argv) {
-  const int kGraphSize = 100;
   BENCHMARK(BM_Transport<Graph>)
       ->Unit(benchmark::kMillisecond)
-      ->Args({kGraphSize,  50000})->Iterations(3)
-      ->Args({kGraphSize, 100000})->Iterations(3)
-      ->Args({kGraphSize, 500000})->Iterations(3)
-      ;
+      ->Apply(CustomArguments)->Iterations(3)
+  ;
   BENCHMARK(BM_Transport<Clique>)
       ->Unit(benchmark::kMillisecond)
-      ->Args({kGraphSize,  50000})->Iterations(3)
-      ->Args({kGraphSize, 100000})->Iterations(3)
-      ->Args({kGraphSize, 500000})->Iterations(3)
+      ->Apply(CustomArguments)->Iterations(3)
   ;
   BENCHMARK(BM_Transport<Chain>)
       ->Unit(benchmark::kMillisecond)
-      ->Args({kGraphSize,  50000})->Iterations(3)
-      ->Args({kGraphSize, 100000})->Iterations(3)
-      ->Args({kGraphSize, 500000})->Iterations(3)
+      ->Apply(CustomArguments)->Iterations(3)
   ;
   benchmark::Initialize(&argc, argv);
   benchmark::RunSpecifiedBenchmarks();
