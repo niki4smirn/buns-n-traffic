@@ -38,7 +38,7 @@ std::vector<int> RandomGenerator::GetVector(int size) {
 
 template<typename GraphClass>
 static void BM_Transport(benchmark::State& state) {
-  for (auto _: state) {
+  for (auto _ : state) {
     state.PauseTiming();
     int graph_size = state.range(0);
     RandomGenerator gen(0, graph_size - 1);
@@ -81,16 +81,13 @@ static void CustomArguments(benchmark::internal::Benchmark* b) {
 int main(int argc, char** argv) {
   BENCHMARK(BM_Transport<Graph>)
       ->Unit(benchmark::kMillisecond)
-      ->Apply(CustomArguments)->Iterations(3)
-  ;
+      ->Apply(CustomArguments)->Iterations(3);
   BENCHMARK(BM_Transport<Clique>)
       ->Unit(benchmark::kMillisecond)
-      ->Apply(CustomArguments)->Iterations(3)
-  ;
+      ->Apply(CustomArguments)->Iterations(3);
   BENCHMARK(BM_Transport<Chain>)
       ->Unit(benchmark::kMillisecond)
-      ->Apply(CustomArguments)->Iterations(3)
-  ;
+      ->Apply(CustomArguments)->Iterations(3);
   benchmark::Initialize(&argc, argv);
   benchmark::RunSpecifiedBenchmarks();
   benchmark::Shutdown();
