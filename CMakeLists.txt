@@ -14,12 +14,12 @@ FetchContent_MakeAvailable(googletest)
 find_package(benchmark REQUIRED)
 
 set(build_files
-        abstract_graph.cpp
-        graph.cpp
-        clique.cpp
-        chain.cpp
+        src/Graphs/AbstractGraph/abstract_graph.cpp
+        src/Graphs/Graph/graph.cpp
+        src/Graphs/Clique/clique.cpp
+        src/Graphs/Chain/chain.cpp
 
-        traffic_manager.cpp
+        src/TrafficManager/traffic_manager.cpp
         )
 
 add_executable(Test

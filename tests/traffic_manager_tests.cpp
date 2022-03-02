@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "../graph.h"
-#include "../traffic_manager.h"
+#include "../src/Graphs/Graph/graph.h"
+#include "../src/TrafficManager/traffic_manager.h"
 
 class TrafficManagerTester {
  public:

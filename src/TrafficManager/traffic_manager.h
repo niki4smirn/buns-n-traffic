@@ -3,7 +3,7 @@
 #include <vector>
 #include <queue>
 
-#include "abstract_graph.h"
+#include "../Graphs/AbstractGraph/abstract_graph.h"
 
 class TrafficManager {
  public:

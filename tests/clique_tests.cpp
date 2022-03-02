@@ -1,4 +1,4 @@
-#include "../clique.h"
+#include "../src/Graphs/Clique/clique.h"
 #include "gtest/gtest.h"
 
 TEST(Clique, Constructors) {

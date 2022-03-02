@@ -1,4 +1,4 @@
-#include "../chain.h"
+#include "../src/Graphs/Chain/chain.h"
 #include "gtest/gtest.h"
 
 TEST(Chain, Constructors) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "abstract_graph.h"
+#include "../AbstractGraph/abstract_graph.h"
 
 class Clique : public AbstractGraph {
  public:

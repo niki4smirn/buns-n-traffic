@@ -2,10 +2,10 @@
 #include <iostream>
 #include <random>
 
-#include "../traffic_manager.h"
-#include "../graph.h"
-#include "../clique.h"
-#include "../chain.h"
+#include "../src/TrafficManager/traffic_manager.h"
+#include "../src/Graphs/Graph/graph.h"
+#include "../src/Graphs/Clique/clique.h"
+#include "../src/Graphs/Chain/chain.h"
 
 class RandomGenerator {
  public:

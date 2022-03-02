@@ -2,7 +2,7 @@
 
 #include <optional>
 
-#include "abstract_graph.h"
+#include "../AbstractGraph/abstract_graph.h"
 
 class Chain : public AbstractGraph{
  public:

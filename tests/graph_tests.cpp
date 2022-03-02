@@ -1,4 +1,4 @@
-#include "../graph.h"
+#include "../src/Graphs/Graph/graph.h"
 #include "gtest/gtest.h"
 
 TEST(Graph, Constructors) {

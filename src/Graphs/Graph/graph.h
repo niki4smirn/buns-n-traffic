@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "abstract_graph.h"
+#include "../AbstractGraph/abstract_graph.h"
 
 class Graph : public AbstractGraph {
  public:
