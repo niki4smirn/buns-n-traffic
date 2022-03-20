@@ -73,7 +73,6 @@ void TrafficManager::SetVehicle(int town, int vehicle) {
   vehicles_[town] = vehicle;
 }
 
-// maybe check if it's possible to move
 int TrafficManager::MoveVehicles(int from, int to, int count) {
   assert(0 <= from && from < vehicles_.size());
   assert(0 <= to && to < vehicles_.size());
@@ -148,7 +147,6 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
 
 int TrafficManager::GetLenForPath(
     const std::vector<AbstractGraph::Edge>& path) {
-  // maybe int64_t
   int total_len = 0;
   for (const auto&[_, len] : path) {
     total_len += len;
