@@ -17,14 +17,16 @@ Chain::Chain(int n) : AbstractGraph(n) {
 
 int GetBoundIndex(
     const std::vector<std::vector<Chain::Edge>>& list) {
+  int prev_index = -1;
   int cur_index = 0;
-  std::vector<bool> used(list.size());
+
   while (list[cur_index].size() == 2) {
-    used[cur_index] = true;
     int next_index = list[cur_index][0].to;
-    if (used[next_index]) {
+
+    if (next_index == prev_index) {
       next_index = list[cur_index][1].to;
     }
+    prev_index = cur_index;
     cur_index = next_index;
   }
   return cur_index;
@@ -58,14 +60,14 @@ void Chain::FillInternalVectors(
     return;
   }
 
-  std::vector<bool> used(n_);
+  int prev_index = -1;
   int cur_index = start_index;
   do {
-    used[cur_index] = true;
     Edge next_edge = list[cur_index][0];
-    if (used[next_edge.to]) {
+    if (next_edge.to == prev_index) {
       next_edge = list[cur_index][1];
     }
+    prev_index = cur_index;
     cur_index = next_edge.to;
 
     nodes_list_[internal_index].right_len = next_edge.length;
