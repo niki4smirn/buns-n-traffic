@@ -165,7 +165,7 @@ TEST(Clique, GetAnyPath) {
     for (int i = 0; i < 4; ++i) {
       for (int j = 0; j < 4; ++j) {
         if (i != j) {
-          ASSERT_EQ(GetPathLength(graph, graph.GetAnyPath(i, j), i), i + j);
+          ASSERT_NE(GetPathLength(graph, graph.GetAnyPath(i, j), i), std::nullopt);
         } else {
           ASSERT_TRUE(graph.GetAnyPath(i, j).empty());
         }
