@@ -73,7 +73,6 @@ void TrafficManager::SetVehicle(int town, int vehicle) {
   vehicles_[town] = vehicle;
 }
 
-// maybe check if it's possible to move
 int TrafficManager::MoveVehicles(int from, int to, int count) {
   assert(0 <= from && from < vehicles_.size());
   assert(0 <= to && to < vehicles_.size());
@@ -89,14 +88,21 @@ int TrafficManager::Transport(int from, int to, int buns_amount) {
   assert(0 <= from && from < vehicles_.size());
   assert(0 <= to && to < vehicles_.size());
   assert(buns_amounts_[from] >= buns_amount);
-  int vehicles_needed = ceil(1. * buns_amount / vehicle_capacity_);
-  int result =
-      MoveClosestVehicles(from, std::max(vehicles_needed - vehicles_[from], 0));
+  int vehicles_needed = buns_amount / vehicle_capacity_;
+  if (buns_amount % vehicle_capacity_ != 0) {
+    ++vehicles_needed;
+  }
+
+  int result = 0;
+  if (vehicles_needed - vehicles_[from] > 0) {
+    result = MoveClosestVehicles(from, vehicles_needed - vehicles_[from]);
+  }
   result += MoveVehicles(from, to, vehicles_needed);
   MoveBuns(from, to, buns_amount);
   return result;
 }
 
+namespace {
 struct PathToTownInfo {
   int length{0};
   int town_index{0};
@@ -104,18 +110,19 @@ struct PathToTownInfo {
   std::strong_ordering operator<=>(
       const PathToTownInfo& path_to_town_info) const = default;
 };
+}
 
 int TrafficManager::MoveClosestVehicles(int to, int count) {
   int res = 0;
-  std::set<PathToTownInfo> towns_queue;
-  towns_queue.insert({0, to});
+  std::set<PathToTownInfo> towns;
+  towns.insert({0, to});
   std::unordered_map<int, int> distance;
   distance[to] = 0;
 
-  while (count > 0 && !towns_queue.empty()) {
-    auto begin_it = towns_queue.begin();
+  while (count > 0 && !towns.empty()) {
+    auto begin_it = towns.begin();
     int town_index = begin_it->town_index;
-    towns_queue.erase(begin_it);
+    towns.erase(begin_it);
 
     int cur_move_count = std::min(vehicles_[town_index], count);
     res = MoveVehicles(town_index, to, cur_move_count);
@@ -127,11 +134,11 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
         can_update_existing = true;
       }
       if (can_update_existing) {
-        towns_queue.erase({distance[next_node], next_node});
+        towns.erase({distance[next_node], next_node});
       }
       if (!distance.contains(next_node) || can_update_existing) {
         distance[next_node] = distance[town_index] + len;
-        towns_queue.insert({distance[next_node], next_node});
+        towns.insert({distance[next_node], next_node});
       }
     }
   }
@@ -140,7 +147,6 @@ int TrafficManager::MoveClosestVehicles(int to, int count) {
 
 int TrafficManager::GetLenForPath(
     const std::vector<AbstractGraph::Edge>& path) {
-  // maybe int64_t
   int total_len = 0;
   for (const auto&[_, len] : path) {
     total_len += len;

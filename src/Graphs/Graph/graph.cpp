@@ -34,7 +34,7 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
   assert(0 <= to && to < n_);
 
   // stores edges to vertices, that will be explored later on
-  std::queue<Edge> q;
+  std::queue<Edge> edges_queue;
   // stores vertices, that were explored
   std::vector<bool> is_used(n_, false);
   // used to restore path
@@ -43,16 +43,16 @@ std::vector<Graph::Edge> Graph::GetAnyPath(int from, int to) const {
 
   is_used[from] = true;
 
-  q.push(Edge(from, -1));
+  edges_queue.push(Edge(from, -1));
 
-  while (!q.empty()) {
-    Edge temp = q.front();
-    q.pop();
+  while (!edges_queue.empty()) {
+    Edge temp = edges_queue.front();
+    edges_queue.pop();
 
     for (const auto& edge : GetEdges(temp.to)) {
       if (!is_used[edge.to]) {
         is_used[edge.to] = true;
-        q.push(edge);
+        edges_queue.push(edge);
         ancestors[edge.to] = std::make_pair(edge, temp.to);
       }
     }
@@ -129,7 +129,7 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForSparse(
   // stores vertices, that will be explored later on
   std::priority_queue<std::pair<int, int>,
                       std::vector<std::pair<int, int>>,
-                      std::greater<>> p_q;
+                      std::greater<>> vertices_queue;
   // used to restore path
   std::vector<std::pair<Edge, int>>
       ancestors(n_, std::make_pair(Edge(-1, -1), -1));
@@ -137,18 +137,18 @@ std::vector<std::pair<Graph::Edge, int>> Graph::DijkstraForSparse(
   std::vector<int> dist(n_, kInf);
 
   dist[from] = 0;
-  p_q.push(std::make_pair(0, from));
+  vertices_queue.push(std::make_pair(0, from));
 
   for (int i = 0; i < n_; ++i) {
-    int vertex = p_q.top().second;
+    int vertex = vertices_queue.top().second;
 
-    p_q.pop();
+    vertices_queue.pop();
 
     for (const auto& edge : GetEdges(vertex)) {
       if (dist[vertex] + edge.length < dist[edge.to]) {
         dist[edge.to] = dist[vertex] + edge.length;
         ancestors[edge.to] = std::make_pair(edge, vertex);
-        p_q.push(std::make_pair(dist[edge.to], edge.to));
+        vertices_queue.push(std::make_pair(dist[edge.to], edge.to));
       }
     }
   }

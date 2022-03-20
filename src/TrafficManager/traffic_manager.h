@@ -23,7 +23,6 @@ class TrafficManager {
   void SetBunsAmount(int town, int buns_amount);
   void SetVehicle(int town, int vehicle);
 
-  // maybe int64_t as return type
   int GetTotalBunsAmount() const;
   int GetTotalVehicles() const;
 

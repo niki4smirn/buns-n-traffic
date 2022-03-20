@@ -40,3 +40,8 @@ Graphs were created using graph(size) constructor
     |           10           | 13.3 ms | 23.3 ms | 121 ms  |
     |           20           | 13.5 ms | 29.8 ms | 133 ms  |
     |          100           | 17.9 ms | 34.6 ms | 158 ms  |
+
+### Conclusion:
+
+Depending on exact situation it is better to use different graph types to
+achieve the best performance.
