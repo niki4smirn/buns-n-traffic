@@ -17,7 +17,7 @@ Chain::Chain(int n) : AbstractGraph(n) {
 
 int GetBoundIndex(
     const std::vector<std::vector<Chain::Edge>>& list) {
-  int prev_index = -1;
+  std::optional<int> prev_index;
   int cur_index = 0;
 
   while (list[cur_index].size() == 2) {
@@ -60,7 +60,7 @@ void Chain::FillInternalVectors(
     return;
   }
 
-  int prev_index = -1;
+  std::optional<int> prev_index;
   int cur_index = start_index;
   do {
     Edge next_edge = list[cur_index][0];
