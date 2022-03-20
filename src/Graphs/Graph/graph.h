@@ -13,16 +13,13 @@ class Graph : public AbstractGraph {
 
   std::vector<Edge> GetEdges(int from) const override;
 
-  // returns vertices count
   int GetEdgesCount() const override;
 
-  // uses BFS algorithm
   std::vector<Edge> GetAnyPath(int from, int to) const override;
   std::vector<Edge> GetShortestPath(int from, int to) const override;
   std::vector<std::vector<Edge>> GetShortestPaths(int from) const override;
 
  private:
-  // uses Dijkstra's algorithm
   std::vector<std::pair<Edge, int>> GenerateShortestPathAncestors(
       int from) const;
   std::vector<std::pair<Edge, int>> DijkstraForDense(int from) const;
