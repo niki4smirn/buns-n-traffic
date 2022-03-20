@@ -95,7 +95,7 @@ int TrafficManager::Transport(int from, int to, int buns_amount) {
   }
 
   int result = 0;
-  if(vehicles_needed - vehicles_[from] > 0) {
+  if (vehicles_needed - vehicles_[from] > 0) {
     result = MoveClosestVehicles(from, vehicles_needed - vehicles_[from]);
   }
   result += MoveVehicles(from, to, vehicles_needed);
@@ -103,6 +103,7 @@ int TrafficManager::Transport(int from, int to, int buns_amount) {
   return result;
 }
 
+namespace {
 struct PathToTownInfo {
   int length{0};
   int town_index{0};
@@ -110,6 +111,7 @@ struct PathToTownInfo {
   std::strong_ordering operator<=>(
       const PathToTownInfo& path_to_town_info) const = default;
 };
+}
 
 int TrafficManager::MoveClosestVehicles(int to, int count) {
   int res = 0;
