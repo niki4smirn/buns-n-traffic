@@ -89,9 +89,15 @@ int TrafficManager::Transport(int from, int to, int buns_amount) {
   assert(0 <= from && from < vehicles_.size());
   assert(0 <= to && to < vehicles_.size());
   assert(buns_amounts_[from] >= buns_amount);
-  int vehicles_needed = ceil(1. * buns_amount / vehicle_capacity_);
-  int result =
-      MoveClosestVehicles(from, std::max(vehicles_needed - vehicles_[from], 0));
+  int vehicles_needed = buns_amount / vehicle_capacity_;
+  if (buns_amount % vehicle_capacity_ != 0) {
+    ++vehicles_needed;
+  }
+
+  int result = 0;
+  if(vehicles_needed - vehicles_[from] > 0) {
+    result = MoveClosestVehicles(from, vehicles_needed - vehicles_[from]);
+  }
   result += MoveVehicles(from, to, vehicles_needed);
   MoveBuns(from, to, buns_amount);
   return result;
