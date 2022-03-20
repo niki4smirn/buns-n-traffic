@@ -71,9 +71,6 @@ std::vector<int> Clique::GenerateShortestPathAncestors(int from) const {
         cur_vertex = new_best;
       }
     }
-    if (distance[cur_vertex] == kInf) {
-      break;
-    }
     is_used[cur_vertex] = true;
 
     for (int to = 0; to < n_; ++to) {
